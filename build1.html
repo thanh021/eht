@@ -75,12 +75,12 @@
     <script>
         // Dữ liệu chỉ số trích xuất từ ảnh
         const atk = ["---", "Tăng ATK", "Tốc độ đánh","Tránh Né", "Chí Mạng", "Thiệt hại đòn Chí mạng", "Sát thương lên Boss", "Sát thương Quái Nhân", "Sát thương lên Xác Sống", "Sát thương Lên Thú", "Sát thương lên Quỷ"];
-        const def = ["---", "Khả năng giảm 25% sát thương", "Tăng DEF", "Tăng HP", "Tránh Né",];
+        const def = ["---", "Khả năng giảm 25% sát thương", "Tăng DEF", "Tăng HP", "Tránh Né","Tốc độ đánh"];
         const full = [...new Set([...atk, ...def]), "Hút máu", "Tăng tốc độ di chuyển", "Cơ hội nhận x2 vàng", "Cơ hội nhận nguyên liệu", "Giảm tiêu hao no đủ", "Giảm tiêu hao tâm trạng", "Giảm tiêu hao thể lực"];
         const slots = ["Vũ khí", "Áo Giáp", "Găng tay", "Giày", "Đai", "Nhẫn", "Dây chuyền", "Mũ"];
         let curV = 'atk', DB = 'EHT_V26_MODERN';
 
-        function hd() { alert("📖 CẨM NANG THỢ SĂN:\n1. Chọn Box: Dùng các tab ⚔️ 🛡️ 🔥 để lọc dòng nhanh.\n2. KHỞI TẠO: Đặt tên thợ săn -> Chọn dòng trang bị -> Bấm [LƯU] để tạo thông tin thợ săn. \n3. Xuất/Nhập: Dữ liệu lưu trực tiếp vào trình duyệt máy này, nếu ông xóa lịch sử web hoặc đổi máy khác là sẽ mất hết thợ săn đã lưu.\n4. Xuất/Nhập: Copy mã để chuyển dữ liệu qua máy khác hoặc gửi cho anh em."); }
+        function hd() { alert("📖 CẨM NANG THỢ SĂN:\n1. Chọn Box: Dùng các tab ⚔️ 🛡️ 🔥 để lọc dòng nhanh.\n2. KHỞI TẠO: Đặt tên thợ săn -> Chọn dòng trang bị -> Bấm [LƯU] để tạo thông tin thợ săn. \n3. Lưu Trữ: Dữ liệu lưu trực tiếp vào trình duyệt máy này, nếu ông xóa lịch sử web hoặc đổi máy khác là sẽ mất hết thợ săn đã lưu.\n4. Xuất/Nhập: Copy mã để chuyển dữ liệu qua máy khác hoặc để vào ghi chú."); }
 
         function render() {
             let h = '', opts = curV==='atk'?atk : (curV==='def'?def:full);
