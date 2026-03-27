@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EHT Pro Lite - Modern UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #09090b; color: #fff; font-size: 11px; font-family: 'Lexend', sans-serif; }
+        .card { background: #18181b; border: 1px solid #27272a; border-radius: 1rem; padding: 0.75rem; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); }
+        select, input { background: #27272a; border: 1px solid #3f3f46; color: #fff; border-radius: 0.6rem; padding: 4px; outline: none; width: 100%; font-size: 10px; font-family: 'Lexend', sans-serif; }
+        .btn { padding: 6px 12px; border-radius: 0.7rem; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; transition: all 0.2s; }
+        .btn:active { transform: scale(0.95); }
+        .btn-p { background: linear-gradient(135deg, #ec4899, #be185d); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2); }
+        .tab-btn { color: #71717a; border-bottom: 2px solid transparent; padding: 6px 10px; font-weight: 600; transition: 0.3s; }
+        .tab-btn.active { color: #ec4899; border-color: #ec4899; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 50; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+        .modal.active { display: flex; }
+        textarea { font-family: monospace; letter-spacing: 1px; }
+        /* Tùy chỉnh thanh cuộn cho mượt */
+        ::-webkit-scrollbar { height: 4px; width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-3">
+    <div id="m" class="modal">
+        <div class="card w-full max-w-xs border-pink-500/40">
+            <h3 id="mt" class="text-pink-500 font-black mb-3 italic tracking-widest text-center uppercase">Mã Xuất Của Ông</h3>
+            <textarea id="ma" readonly class="w-full h-32 bg-zinc-900 border-zinc-800 text-[9px] p-3 rounded-xl mb-4 outline-none text-zinc-400 resize-none"></textarea>
+            <div class="flex gap-2">
+                <button onclick="cp()" class="btn btn-p flex-1">COPY MÃ</button>
+                <button onclick="off()" class="btn bg-zinc-800 flex-1">ĐÓNG</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <div class="flex flex-wrap gap-2 mb-6 items-center justify-between">
+            <h1 class="text-2xl font-black text-pink-500 italic tracking-tighter">EHT test</h1>
+            <div class="flex gap-1">
+                <button onclick="hd()" class="btn bg-zinc-800 text-pink-400 hover:bg-zinc-700">📖 Hướng dẫn</button>
+                <button onclick="on()" class="btn bg-zinc-800 hover:bg-zinc-700">📤 Xuất</button>
+                <button onclick="nhap()" class="btn bg-zinc-800 hover:bg-zinc-700">📥 Nhập</button>
+            </div>
+            <div class="flex gap-2 bg-zinc-900 p-1.5 rounded-xl border border-zinc-800 w-full md:w-auto shadow-inner">
+                <input type="text" id="name" placeholder="Tên thợ săn..." class="px-3 border-none bg-transparent font-semibold">
+                <button onclick="luu()" class="btn btn-p shadow-lg">Lưu</button>
+            </div>
+        </div>
+
+        <div class="flex gap-4 mb-6 border-b border-zinc-800 overflow-x-auto no-scrollbar">
+            <button onclick="v('atk')" id="b-atk" class="tab-btn active italic">⚔️ TẤN CÔNG</button>
+            <button onclick="v('def')" id="b-def" class="tab-btn italic">🛡️ PHÒNG THỦ</button>
+            <button onclick="v('all')" id="b-all" class="tab-btn italic text-zinc-400">🔥 FULL DÒNG</button>
+        </div>
+
+        <div id="list" class="flex gap-2 mb-6 overflow-x-auto pb-2"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div id="eqs" class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            
+            <div class="lg:col-span-1">
+                <div class="card h-fit sticky top-4 border-pink-500/20 bg-zinc-900/50 backdrop-blur-sm">
+                    <div class="flex justify-between items-center mb-4 border-b border-zinc-800 pb-2">
+                        <b class="text-pink-500 italic text-sm">TỔNG CHỈ SỐ</b>
+                        <span id="err" class="hidden text-red-500 text-[9px] font-black animate-pulse">⚠️ TRÙNG DÒNG</span>
+                    </div>
+                    <div id="res" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu chỉ số trích xuất từ ảnh
+        const atk = ["---", "Tăng ATK", "Tốc độ đánh","Tăng Tránh Né", "Chí Mạng", "Thiệt hại đòn Chí mạng", "Sát thương lên Boss", "Sát thương Quái Nhân", "Sát thương lên Xác Sống", "Sát thương Lên Thú", "Sát thương lên Quỷ"];
+        const def = ["---", "Khả năng giảm 25% sát thương", "Tăng DEF", "Tăng HP", "Tăng Tránh Né",];
+        const full = [...new Set([...atk, ...def]), "Hút máu", "Tăng tốc độ di chuyển", "Cơ hội nhận x2 vàng", "Cơ hội nhận nguyên liệu", "Giảm tiêu hao no đủ", "Giảm tiêu hao tâm trạng", "Giảm tiêu hao thể lực"];
+        const slots = ["Vũ khí", "Áo Giáp", "Găng tay", "Giày", "Đai", "Nhẫn", "Dây chuyền", "Mũ"];
+        let curV = 'atk', DB = 'EHT_V26_MODERN';
+
+        function hd() { alert("📖 CẨM NANG THỢ SĂN:\n1. Chọn Box: Dùng các tab ⚔️ 🛡️ 🔥 để lọc dòng nhanh.\n2. Dữ liệu lưu trực tiếp vào trình duyệt máy này, nếu ông xóa lịch sử web hoặc đổi máy khác là sẽ mất hết thợ săn đã lưu.\n3. Xuất/Nhập: Copy mã để chuyển dữ liệu qua máy khác hoặc gửi cho anh em."); }
+
+        function render() {
+            let h = '', opts = curV==='atk'?atk : (curV==='def'?def:full);
+            slots.forEach(s => {
+                h += `<div class="card box"><div class="flex justify-between mb-3"><b class="text-pink-400 uppercase italic text-[9px] tracking-wider">${s}</b><b class="msg hidden text-red-500 text-[9px] font-black">LỖI TRÙNG!</b></div>`;
+                for(let i=0; i<5; i++) h += `<div class="flex gap-2 mb-2"><select class="t flex-[2.5]">${opts.map(o=>`<option value="${o}">${o}</option>`).join('')}</select><input type="number" class="v flex-[1] text-center font-bold" value="0"></div>`;
+                h += `</div>`;
+            });
+            document.getElementById('eqs').innerHTML = h;
+            document.querySelectorAll('select, input').forEach(el => el.oninput = calc);
+        }
+
+        function v(type) { curV = type; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById('b-'+type).classList.add('active'); render(); calc(); }
+
+        function calc() {
+            let totals = {}, globalErr = false;
+            document.querySelectorAll('.box').forEach(b => {
+                let ts = b.querySelectorAll('.t'), vs = b.querySelectorAll('.v'), cnt = {}, bErr = false;
+                ts.forEach((t, i) => {
+                    if(t.value !== "---") {
+                        cnt[t.value] = (cnt[t.value] || 0) + 1;
+                        if(cnt[t.value] > 2) { bErr = true; globalErr = true; }
+                        totals[t.value] = (totals[t.value] || 0) + (parseFloat(vs[i].value) || 0);
+                    }
+                });
+                b.classList.toggle('error', bErr); b.querySelector('.msg').classList.toggle('hidden', !bErr);
+            });
+            document.getElementById('err').classList.toggle('hidden', !globalErr);
+            const resEl = document.getElementById('res');
+            let resHtml = Object.entries(totals).map(([k,v]) => `<div class="flex justify-between items-center bg-black/40 p-2.5 rounded-xl border border-zinc-800/50 shadow-inner"><span>${k}</span><b class="text-pink-500 text-sm font-extrabold tracking-tighter">${v.toFixed(1)}%</b></div>`).join('');
+            resEl.innerHTML = resHtml || '<p class="text-zinc-700 text-center py-4 italic">Chưa có chỉ số...</p>';
+        }
+
+        function on() { let d=localStorage.getItem(DB); if(!d || d==='{}') return alert('Chưa có thợ săn nào để xuất mã!'); document.getElementById('ma').value = btoa(unescape(encodeURIComponent(d))); document.getElementById('m').classList.add('active'); }
+        function off() { document.getElementById('m').classList.remove('active'); }
+        function cp() { document.getElementById('ma').select(); document.execCommand('copy'); alert('Đã Copy Mã! Gửi cho bạn bè ngay thôi.'); }
+        function nhap() { let m=prompt('Dán mã thợ săn vào đây:'); if(m) { try { localStorage.setItem(DB, decodeURIComponent(escape(atob(m)))); location.reload(); } catch(e){alert('Mã không hợp lệ rồi ông ơi!');} } }
+
+        function luu() {
+            let n = document.getElementById('name').value.trim(); if(!n) return alert('Đặt cái tên cho thợ săn đã!');
+            let d = Array.from(document.querySelectorAll('.box')).map(b => Array.from(b.querySelectorAll('.t')).map((t,i)=>({t:t.value, v:b.querySelectorAll('.v')[i].value})));
+            let db = JSON.parse(localStorage.getItem(DB) || '{}'); db[n] = {d, v:curV}; localStorage.setItem(DB, JSON.stringify(db)); list();
+        }
+
+        function list() {
+            let db = JSON.parse(localStorage.getItem(DB) || '{}');
+            document.getElementById('list').innerHTML = Object.keys(db).map(n => `<div onclick="load('${n}')" class="bg-zinc-800 p-2 px-4 rounded-xl cursor-pointer flex gap-3 border border-zinc-700 text-[10px] font-bold hover:border-pink-500 transition shadow-md"><span>${n}</span><b onclick="event.stopPropagation(); del('${n}')" class="text-zinc-600 hover:text-red-500">✕</b></div>`).join('');
+        }
+
+        function load(n) {
+            let db = JSON.parse(localStorage.getItem(DB) || '{}');
+            if(db[n]) {
+                document.getElementById('name').value = n; curV = db[n].v || 'atk'; v(curV);
+                db[n].d.forEach((box, i) => {
+                    let b = document.querySelectorAll('.box')[i];
+                    box.forEach((line, j) => { b.querySelectorAll('.t')[j].value = line.t; b.querySelectorAll('.v')[j].value = line.v; });
+                });
+                calc();
+            }
+        }
+
+        function del(n) { if(confirm(`Xóa thợ săn "${n}" hả ông?`)) { let db=JSON.parse(localStorage.getItem(DB)||'{}'); delete db[n]; localStorage.setItem(DB, JSON.stringify(db)); list(); } }
+        window.onload = () => { render(); list(); };
+    </script>
+</body>
+</html>
