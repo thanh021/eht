@@ -3,50 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Máy tính Tốc độ đánh evil hunter tycoon</title>
+    <title>Máy tính Tốc độ - EHT Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         .black-bg { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 50; display: flex; align-items: center; justify-content: center; }
         .white-bg { background: white; padding: 25px; border-radius: 1.5rem; max-width: 90%; color: #18181b; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        select { cursor: pointer; }
+        select { cursor: pointer; appearance: none; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200 font-sans">
 
-<div id="app" class="max-w-4xl mx-auto px-4 py-12 text-center">
+<div id="app" class="max-w-4xl mx-auto px-4 py-8 text-center">
     
-
-	<a href="https://evilhuntervn.blogspot.com/" target="_blank" class="text-pink-500 hover:underline mb-8 inline-flex items-center gap-2 font-bold text-sm">
-    📖 Đọc thêm nhiều bài viết của blog
-</a>
-
-    <div v-if="isOpened" class="black-bg" @click="isOpened=false">
-        <div class="white-bg text-left shadow-2xl">
-            <h4 class="font-bold text-xl mb-3 text-pink-600">Công thức tính 2026</h4>
-            <p class="text-sm mb-4 leading-relaxed">Tốc độ cuối = <br> Vũ khí * (1 - Stat - Tính cách - Bí pháp - Guild - Trang bị) / (1 + Tăng Fury + Tăng Quicken)</p>
-            <div class="bg-zinc-100 p-4 rounded-xl font-mono text-xs overflow-x-auto border border-zinc-200">
-                {{ final_speed }} = {{ weapon_speed }} * (1 - {{ stat }} - {{ personality }} - {{ secret / 100 }} - {{ union_speed / 100 }} - {{ equip_speed / 100 }}) / (1 + {{ (fury - 1).toFixed(2) }} + {{ (quicken - 1).toFixed(2) }})
-            </div>
-            <p class="mt-4 text-xs text-zinc-500 italic text-center text-pink-500">* Bấm bất kỳ đâu để đóng *</p>
-        </div>
-    </div>
-
-    <h1 class="text-4xl font-black text-pink-500 mb-2 tracking-tighter uppercase">Máy tính Tốc độ đánh</h1>
-    <p class="text-zinc-500 mb-10 text-sm font-medium tracking-widest">PHIÊN BẢN CẬP NHẬT ABYSS BOOST 2026</p>
-
-    <div class="overflow-x-auto bg-zinc-900 rounded-3xl border border-zinc-800 p-3 mb-8 shadow-2xl">
-        <table class="w-full text-sm">
-         <div id="app" class="max-w-4xl mx-auto px-4 py-8 text-center">
-    
-    <a href="index.html" class="text-pink-500 hover:underline mb-6 inline-flex items-center gap-2 text-sm">
-        ← Quay lại trang chủ
+    <a href="LINK_BLOG_CỦA_ÔNG" target="_blank" class="text-pink-500 hover:underline mb-6 inline-flex items-center gap-2 text-sm font-bold">
+        📖 Đọc thêm nhiều bài viết của blog
     </a>
 
     <div v-if="isOpened" class="black-bg" @click="isOpened=false">
         <div class="white-bg text-left shadow-2xl" @click.stop>
-            <h4 class="font-bold text-lg mb-3 text-pink-600 font-black uppercase">Công thức 2026</h4>
+            <h4 class="font-bold text-lg mb-3 text-pink-600 uppercase">Công thức 2026</h4>
             <div class="bg-zinc-100 p-4 rounded-xl font-mono text-[10px] sm:text-xs overflow-x-auto border border-zinc-200 text-zinc-600">
                 {{ final_speed }} = {{ weapon_speed }} * (1 - {{ stat }} - {{ personality }} - {{ secret / 100 }} - {{ union_speed / 100 }} - {{ equip_speed / 100 }}) / (1 + {{ (fury - 1).toFixed(2) }} + {{ (quicken - 1).toFixed(2) }})
             </div>
@@ -55,15 +32,14 @@
     </div>
 
     <h1 class="text-3xl sm:text-4xl font-black text-pink-500 mb-1 tracking-tighter uppercase">Máy tính Tốc độ</h1>
-    <p class="text-zinc-500 mb-8 text-[10px] font-bold tracking-[0.3em]">ABYSS BOOST EDITION</p>
+    <p class="text-zinc-500 mb-8 text-[10px] font-bold tracking-[0.3em]">PHIÊN BẢN MOBILE & BLOGSPOT</p>
 
     <div class="bg-zinc-900 rounded-[2rem] border border-zinc-800 p-4 sm:p-6 mb-6 shadow-2xl">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
             <div class="space-y-4">
                 <div class="text-left">
                     <label class="text-pink-500 text-[9px] font-black uppercase tracking-widest ml-2 mb-1 block">Nghề nghiệp</label>
-                    <select v-model.number="job" @change="change_job" class="bg-zinc-800 rounded-2xl px-4 py-3 outline-none w-full border border-zinc-700 focus:border-pink-500 text-sm appearance-none">
+                    <select v-model.number="job" @change="change_job" class="bg-zinc-800 rounded-2xl px-4 py-3 outline-none w-full border border-zinc-700 focus:border-pink-500 text-sm">
                         <option disabled value="">Chọn nghề</option>
                         <option value="0">Berserker</option>
                         <option value="1">Sorcerer</option>
@@ -74,12 +50,11 @@
                 </div>
                 <div class="text-left" v-if="job !== ''">
                     <label class="text-pink-500 text-[9px] font-black uppercase tracking-widest ml-2 mb-1 block">Vũ khí</label>
-                    <select v-model.number="weapon_speed" @change="weapon_speed_cal" class="bg-zinc-800 rounded-2xl px-4 py-3 w-full border border-zinc-700 focus:border-pink-500 text-sm appearance-none">
+                    <select v-model.number="weapon_speed" @change="weapon_speed_cal" class="bg-zinc-800 rounded-2xl px-4 py-3 w-full border border-zinc-700 focus:border-pink-500 text-sm">
                         <option v-for="w in weapon_list[job]" :key="w.name" :value="w.speed">{{ w.name }}</option>
                     </select>
                 </div>
             </div>
-
             <div class="space-y-4 text-left">
                 <div>
                     <label class="text-pink-500 text-[9px] font-black uppercase tracking-widest ml-2 mb-1 block">Màu chữ (Stat)</label>
@@ -94,13 +69,12 @@
                     <label class="text-pink-500 text-[9px] font-black uppercase tracking-widest ml-2 mb-1 block">Tính cách</label>
                     <select v-model.number="personality" @change="weapon_speed_cal" class="bg-zinc-800 rounded-2xl px-4 py-3 w-full border border-zinc-700 text-sm">
                         <option value="0">Ko có</option>
-                        <option value="-0.1">Chậm chạp (-10%)</option>
+                        <option value="-0.1">Chậm (-10%)</option>
                         <option value="0.07">Anh dũng (7%)</option>
                         <option value="0.1">Nhanh nhẹn (10%)</option>
                     </select>
                 </div>
             </div>
-
             <div class="grid grid-cols-2 gap-3 text-left lg:block lg:space-y-4">
                 <div>
                     <label class="text-pink-500 text-[9px] font-black uppercase tracking-widest ml-2 mb-1 block">Bí pháp %</label>
@@ -111,7 +85,6 @@
                     <input v-model.number="union_speed" type="number" @input="weapon_speed_cal" class="bg-zinc-800 rounded-2xl px-4 py-3 w-full text-center border border-zinc-700 text-sm font-bold">
                 </div>
             </div>
-
             <div class="space-y-4 text-left">
                 <div>
                     <label class="text-pink-500 text-[9px] font-black uppercase tracking-widest ml-2 mb-1 block">Buff Quicken</label>
@@ -131,7 +104,6 @@
                     </select>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -157,46 +129,10 @@
             <div class="w-1 h-4 bg-pink-500"></div> Hướng dẫn nhanh
         </h3>
         <ul class="space-y-3 text-zinc-400 text-xs leading-relaxed">
-            <li><strong class="text-pink-500">0.25:</strong> Là mốc tốc độ đánh nhanh nhất bản 2026.</li>
-            <li><strong class="text-pink-500">Bí pháp/Bang:</strong> Đã tự động điền mốc 10% và 5% khi chọn nghề.</li>
-            <li><strong class="text-pink-500">Lưu ý:</strong> Đồ <strong>Abyss Boost</strong> có tốc độ cơ bản rất cao, anh em nhớ chọn đúng tên vũ khí.</li>
+            <li><strong class="text-pink-500">0.25:</strong> Mốc tốc độ nhanh nhất.</li>
+            <li><strong class="text-pink-500">Bí pháp/Bang:</strong> Tự điền 10% & 5% khi chọn nghề.</li>
+            <li><strong class="text-pink-500">Lưu ý:</strong> Đồ <strong>Abyss Boost</strong> có tốc cơ bản cao.</li>
         </ul>
-    </div>
-</div>
-        </table>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 text-center">
-        <div class="bg-zinc-900 p-10 rounded-[2.5rem] border border-zinc-800 shadow-xl relative overflow-hidden group">
-            <div class="absolute top-0 left-0 w-2 h-full bg-pink-500"></div>
-            <p class="text-zinc-500 uppercase tracking-[0.2em] text-[10px] mb-3 font-bold">Rune & Trang bị cần thêm</p>
-            <p class="text-6xl font-black text-pink-500 group-hover:scale-110 transition-transform cursor-default">{{ equip_speed }}%</p>
-        </div>
-        <div class="bg-zinc-900 p-10 rounded-[2.5rem] border border-zinc-800 shadow-xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
-            <p class="text-zinc-500 uppercase tracking-[0.2em] text-[10px] mb-3 font-bold">Tốc độ cuối mục tiêu</p>
-            <input v-model.number="final_speed" step="0.01" type="number" @input="weapon_speed_cal" class="bg-transparent text-6xl font-black text-amber-500 text-center w-full outline-none group-hover:scale-110 transition-transform">
-        </div>
-    </div>
-
-    <button @click="isOpened=true" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 px-8 py-3 rounded-full text-xs font-bold transition-all mb-12 border border-zinc-700 uppercase tracking-widest">
-        🔍 Giải mã công thức tính
-    </button>
-
-    <div class="text-left p-10 bg-zinc-900 rounded-[2.5rem] border border-zinc-800 shadow-inner">
-        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-            <span class="w-8 h-8 bg-pink-500/10 text-pink-500 rounded-lg flex items-center justify-center italic font-serif">i</span> 
-            Hướng dẫn cho anh em
-        </h3>
-        <ul class="space-y-4 text-zinc-400 text-sm leading-relaxed">
-            <li class="flex items-start gap-3"><span class="text-pink-500 mt-1">●</span> <span><strong>Chọn đúng nghề:</strong> Mỗi nghề có tốc độ cơ bản và buff khác nhau.</span></li>
-                <li class="flex items-start gap-3"><span class="text-pink-500 mt-1">●</span> <span><strong>Lưu ý:</strong> Nếu kết quả ra 53% thì ông phải mặc đủ 53% trên đồ mới đạt mốc tốc độ mong muốn.</span></li>
-			<li class="flex items-start gap-3"><span class="text-pink-500 mt-1">●</span> <span><strong>Lưu ý:</strong> Rune tốc độ đánh sẽ không thể cộng dồn với nhau.</span></li>
-        </ul>
-    </div>
-
-    <div class="mt-12 text-zinc-700 text-[10px] uppercase tracking-widest font-medium">
-        • Thư Viện Evil Hunter Tycoon
     </div>
 </div>
 
@@ -205,62 +141,22 @@
     createApp({
         data() {
             return {
-                job: '', weapon_speed: 2, stat: 0, personality: 0, secret: 0,
-                union_speed: 0, quicken: 1, fury: 1, equip_speed: 0,
+                job: '', weapon_speed: 2, stat: 0, personality: 0, secret: 10,
+                union_speed: 5, quicken: 1, fury: 1, equip_speed: 0,
                 final_speed: 0.25, isOpened: false,
-                items: ['Nghề', 'Vũ khí', 'Stat', 'T.Cách', 'Bí pháp', 'Guild', 'Đặc Tính', 'Fury'],
-                
-                // ĐÂY LÀ KHO DỮ LIỆU - Ông thêm đồ mới cực nhanh tại đây
                 weapon_list: {
-                    0: [ // Berserker
-                        {name: 'Cổ Đại / Nguyên Thủy', speed: 2},
- 			{name: 'Khởi Thủy / Hỗn Độn', speed: 2},
-                        {name: 'Vực Thẳm (Abyss)', speed: 2},
-                        {name: 'Valhalla / Fenrir / Ares', speed: 2.2},  
-			{name: 'Độc/Bóng tối/Băng', speed: 2.2},
-                    ],
-                    1: [ // Sorcerer
- 			{name: 'Cổ Đại / Nguyên Thủy', speed: 2.2},
- 			{name: 'Khởi Thủy / Hỗn Độn', speed: 2.2},
-                        {name: 'Vực Thẳm (Abyss)', speed: 2.2},
-                        {name: 'Immortal / Isis / Uranus', speed: 2.3},  
-			{name: 'Độc/Bóng tối/Lửa', speed: 2.3},
-               
-                    ],
-                    2: [ // Ranger
-			{name: 'Cổ Đại / Nguyên Thủy', speed: 1.8},
- 			{name: 'Khởi Thủy / Hỗn Độn', speed: 1.8},
-                        {name: 'Vực Thẳm (Abyss)', speed: 1.8},
-                        {name: 'Vijaya / Gandiva / Artemis', speed: 2},  
-			{name: 'Độc / Bóng tối / Băng', speed: 2},
-                    ],
-                    3: [ // Paladin
-			{name: 'Cổ Đại / Nguyên Thủy', speed: 2.4},
- 			{name: 'Khởi Thủy / Hỗn Độn', speed: 2.4},
-                        {name: 'Vực Thẳm (Abyss)', speed: 2.4},
-                        {name: 'Mjolnir / Mahes / Helios', speed: 2.5},  
-			{name: 'Độc / Bóng tối / Lửa', speed: 2.5},
-                    
-                    ],
-                    4: [ // Dark Knight (Class mới)
-			{name: 'Cổ Đại / Nguyên Thủy', speed: 2.2},
- 			{name: 'Khởi Thủy / Hỗn Độn', speed: 2.2},
-                        {name: 'Vực Thẳm (Abyss)', speed: 2.2},
-                        {name: 'Trishular / Gungir / Poseidon', speed: 2.3},  
-			{name: 'Độc/Bóng tối/Băng', speed: 2.3},
-                    
-                    ]
+                    0: [{name: 'Cổ Đại / Nguyên Thủy', speed: 2},{name: 'Khởi Thủy / Hỗn Độn', speed: 2},{name: 'Vực Thẳm (Abyss)', speed: 2},{name: 'Valhalla / Fenrir / Ares', speed: 2.2},{name: 'Độc/Bóng tối/Băng', speed: 2.2}],
+                    1: [{name: 'Cổ Đại / Nguyên Thủy', speed: 2.2},{name: 'Khởi Thủy / Hỗn Độn', speed: 2.2},{name: 'Vực Thẳm (Abyss)', speed: 2.2},{name: 'Immortal / Isis / Uranus', speed: 2.3},{name: 'Độc/Bóng tối/Lửa', speed: 2.3}],
+                    2: [{name: 'Cổ Đại / Nguyên Thủy', speed: 1.8},{name: 'Khởi Thủy / Hỗn Độn', speed: 1.8},{name: 'Vực Thẳm (Abyss)', speed: 1.8},{name: 'Vijaya / Gandiva / Artemis', speed: 2},{name: 'Độc / Bóng tối / Băng', speed: 2}],
+                    3: [{name: 'Cổ Đại / Nguyên Thủy', speed: 2.4},{name: 'Khởi Thủy / Hỗn Độn', speed: 2.4},{name: 'Vực Thẳm (Abyss)', speed: 2.4},{name: 'Mjolnir / Mahes / Helios', speed: 2.5},{name: 'Độc / Bóng tối / Lửa', speed: 2.5}],
+                    4: [{name: 'Cổ Đại / Nguyên Thủy', speed: 2.2},{name: 'Khởi Thủy / Hỗn Độn', speed: 2.2},{name: 'Vực Thẳm (Abyss)', speed: 2.2},{name: 'Trishular / Gungir / Poseidon', speed: 2.3},{name: 'Độc/Bóng tối/Băng', speed: 2.3}]
                 }
             }
         },
         methods: {
             change_job() {
-                this.final_speed = 0.25;
-		// Tự động điền Bí pháp và Bang hội khi chọn Class
-    		this.secret = 10; 
-    		this.union_speed = 5;
-                // Thiết lập mặc định cho từng nghề để ông đỡ phải chọn nhiều
-                if (this.job === 0) { this.weapon_speed = 2; this.quicken = 1; this.fury = 4; }
+                this.final_speed = 0.25; this.secret = 10; this.union_speed = 5;
+                if (this.job === 0) { this.weapon_speed = 2; this.quicken = 1; this.fury = 4.54; }
                 else if (this.job === 1) { this.weapon_speed = 2.2; this.quicken = 1.5; this.fury = 1; }
                 else if (this.job === 2) { this.weapon_speed = 1.8; this.quicken = 1.5; this.fury = 1; }
                 else if (this.job === 3) { this.weapon_speed = 2.4; this.quicken = 1.5; this.fury = 1; }
@@ -268,7 +164,6 @@
                 this.weapon_speed_cal();
             },
             weapon_speed_cal() {
-                // Công thức chuẩn EHT 2026
                 let res = (1.0 - this.stat - this.personality - this.secret / 100 - this.union_speed / 100 
                           - this.final_speed / this.weapon_speed * (1.0 + this.fury - 1.0 + this.quicken - 1.0)) * 100;
                 this.equip_speed = res < 0 ? 0 : res.toFixed(3);
