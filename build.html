@@ -80,7 +80,7 @@
         const slots = ["Vũ khí", "Áo Giáp", "Găng tay", "Giày", "Đai", "Nhẫn", "Dây chuyền", "Mũ"];
         let curV = 'atk', DB = 'EHT_V26_MODERN';
 
-        function hd() { alert("📖 CẨM NANG THỢ SĂN:\n1. Chọn Box: Dùng các tab ⚔️ 🛡️ 🔥 để lọc dòng nhanh.\n2. Dữ liệu lưu trực tiếp vào trình duyệt máy này, nếu ông xóa lịch sử web hoặc đổi máy khác là sẽ mất hết thợ săn đã lưu.\n3. Xuất/Nhập: Copy mã để chuyển dữ liệu qua máy khác hoặc gửi cho anh em."); }
+        function hd() { alert("📖 CẨM NANG THỢ SĂN:\n1. Chọn Box: Dùng các tab ⚔️ 🛡️ 🔥 để lọc dòng nhanh.\n2. KHỞI TẠO: Đặt tên thợ săn -> Chọn dòng trang bị -> Bấm [LƯU] để tạo thông tin thợ săn. \n3. Xuất/Nhập: Dữ liệu lưu trực tiếp vào trình duyệt máy này, nếu ông xóa lịch sử web hoặc đổi máy khác là sẽ mất hết thợ săn đã lưu.\n4. Xuất/Nhập: Copy mã để chuyển dữ liệu qua máy khác hoặc gửi cho anh em."); }
 
         function render() {
             let h = '', opts = curV==='atk'?atk : (curV==='def'?def:full);
