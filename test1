@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EHT Builder V3 - Kho + Đá Bổ Trợ + 2 Checkbox + Cloud Đám Mây</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #09090b; color: #fff; font-size: 11px; font-family: 'Lexend', sans-serif; }
+        .card { background: #18181b; border: 1px solid #27272a; border-radius: 1rem; padding: 0.75rem; transition: 0.3s; }
+        select, input { 
+            background: #27272a; 
+            border: 1px solid #3f3f46; 
+            color: #fff; 
+            border-radius: 0.6rem; 
+            padding: 4px; 
+            outline: none; 
+            width: 100%; 
+            font-size: 10px; 
+        }
+        .btn-p { 
+            background: linear-gradient(135deg, #ec4899, #be185d); 
+            padding: 6px 12px; 
+            border-radius: 0.7rem; 
+            font-weight: 800; 
+            font-size: 9px; 
+        }
+        .tab-btn { 
+            color: #71717a; 
+            border-bottom: 2px solid transparent; 
+            padding: 6px 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+        }
+        .tab-btn.active { 
+            color: #ec4899; 
+            border-color: #ec4899; 
+        }
+        .vk-select { 
+            background: #311b92; 
+            border: 1px solid #673ab7; 
+            font-weight: bold; 
+            color: #e1bee7; 
+        }
+        select { position: relative; z-index: 30 !important; }
+        select:focus { z-index: 50 !important; box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.6); }
+        .box { position: relative; z-index: 10; }
+        optgroup { color: #ec4899; font-weight: bold; }
+.box-content.hidden-node {
+    display: none;
+}
+.btn-hide {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.btn-hide.active {
+    transform: rotate(-90deg);
+}
+    </style>
+</head>
+<body class="p-3">
+    <div class="mb-6">
+        <div class="flex flex-nowrap gap-2 items-end mb-3">
+            <div class="flex-[2] min-w-[120px]">
+                <div class="text-pink-500/80 italic text-[9px] mb-1 ml-1 font-medium">Hồ sơ thợ săn</div>
+                <input type="text" id="name" placeholder="Tên Thợ Săn..." 
+                       class="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl focus:border-pink-500/50 transition-all text-[10px] h-9 w-full">
+            </div>
+            <div class="flex-[3] flex gap-1.5 h-9">
+                <!-- TẠO (giữ từ cả 2 file) -->
+                <button onclick="luuProfile()" class="btn-p flex-1 !py-0 text-[9px] font-bold">TẠO/LƯU</button>
+                
+                <!-- CLOUD TỪ BUILD1.HTML (đã thêm vào test1) -->
+                <button onclick="on()" class="btn-p flex-1 !py-0 text-[9px] font-bold bg-indigo-600 border-none">☁️ LƯU ĐÁM MÂY</button>
+                <button onclick="nhap()" class="btn-p flex-1 !py-0 text-[9px] font-bold bg-emerald-600 border-none">📥 NHẬP MÃ</button>
+                
+                <!-- KHO (giữ nguyên) -->
+                <button onclick="showKho()" class="btn-p flex-1 !py-0 text-[9px] font-bold">📦 KHO</button>
+            </div>
+        </div>
+        
+        <div class="mt-4 pt-3 border-t border-zinc-800/50">
+            <div class="text-pink-500/80 italic text-[9px] mb-2 ml-1">Hồ sơ đã lưu:</div>
+            <div id="listProfile" class="flex flex-wrap gap-2"></div>
+        </div>
+    </div>
+
+    <div class="flex gap-4 mb-6 border-b border-zinc-800">
+        <button onclick="v('atk')" id="b-atk" class="tab-btn italic">⚔️ TẤN CÔNG</button>
+        <button onclick="v('def')" id="b-def" class="tab-btn italic">🛡️ PHÒNG THỦ</button>
+        <button onclick="v('all')" id="b-all" class="tab-btn active italic">🔥 TẤT CẢ</button>
+    </div>
+
+    <div id="eqs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
+
+    <div class="card border-pink-500/20 bg-zinc-900/50">
+        <b class="text-pink-500 italic text-sm uppercase block mb-4">Tổng Chỉ Số</b>
+        <div id="res" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+    </div>
+
+    <!-- MODAL KHO LƯU TRỮ (giữ nguyên từ test1) -->
+    <div id="khoModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-zinc-700">
+                <h2 class="text-xl font-bold text-pink-500">📦 KHO LƯU TRỮ ĐỒ</h2>
+                <button onclick="hideKho()" class="text-3xl leading-none text-zinc-400 hover:text-white">×</button>
+            </div>
+            <div id="khoContent" class="flex-1 p-6 overflow-y-auto text-sm"></div>
+            <div class="px-6 py-4 border-t border-zinc-700 text-center text-xs text-zinc-500">
+                Tổng số món đồ trong kho: <span id="totalItems" class="font-bold text-pink-400">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CLOUD ĐÁM MÂY (THÊM TỪ BUILD1.HTML - ĐÃ SỬA ĐỂ DÙNG CLASS "hidden" cho đồng bộ) -->
+    <div id="cloudModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-md w-full p-8 text-center">
+            <h2 class="text-2xl font-bold text-pink-500 mb-6">☁️ MÃ LƯU ĐÁM MÂY</h2>
+            <div id="ma_val" class="text-6xl font-mono tracking-[12px] bg-black/70 py-8 rounded-3xl text-pink-400 font-black mb-6">ABCD123</div>
+            <p class="text-xs text-zinc-400 mb-8">Gửi mã này cho bạn bè để họ nạp build ngay!</p>
+            <button onclick="hideCloudModal()" class="btn-p w-full py-3 text-sm">ĐÓNG</button>
+        </div>
+    </div>
+
+   <script>
+    const DB = 'EHT_PROFILES_V3';
+    const INVENTORY_DB = 'EHT_V3_INVENTORY';
+    const GOOGLE_API = 'https://script.google.com/macros/s/AKfycbyEWn53VqoRXk7tl9CEQQgnvWBhv-VeI-sU65U4b2N48Fbp1gIj3ew5LaL8t11TvyYvjg/exec';
+
+    const chungATK = ["---", "Tăng ATK", "Chí Mạng", "Thiệt hại đòn Chí mạng", "Sát thương lên Boss"];
+    const chungDEF = ["---", "Tăng DEF", "Tăng HP", "Tránh Né", "Kháng hiệu ứng"];
+    const chungALL = [...new Set([...chungATK, ...chungDEF])];
+
+    const slots = ["Vũ khí", "Áo Giáp", "Găng tay", "Giày", "Đai", "Nhẫn", "Dây chuyền", "Mũ"];
+    let curV = 'all';
+    let inventory = {};
+
+    const classWeapons = {
+        "Berserker": {
+            "PvE": {
+                "Kiếm bóng tối": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Vết nứt bóng tối với xác suất 15~25%", "11~23% Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+                "Kiếm bóng tối Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Vết nứt bóng tối với xác suất 15~25%", "14~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"],
+                "Lưỡi kiếm độc": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Với xác suất 15~30% gây sát thương gấp 3", "11~23% Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+                "Lưỡi kiếm độc Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Với xác suất 15~30% gây sát thương gấp 3", "14~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"],
+                "Kiếm Băng Giá": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Khi tấn công Quái vật, có 15~25% khả năng thi triển Con băng giá", "16~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"]
+            },
+            "PvP": {},
+            "Farm Field": {}
+        },
+        "Paladin": {}, "Sorcerer": {}, "Ranger": {}, "DarkKnight": {}
+    };
+
+
+  const uniqueEquip = {
+    "Áo Giáp": {
+        "Áo Choàng Lửa": [{t: "Tăng DEF", v: 15.5}, {t: "Kháng hiệu ứng", v: 10}, {t: "Phản sát thương", v: 0}],
+        "Giáp Thiên Thần": [{t: "Tăng HP", v: 25}, {t: "Hồi phục mỗi giây", v: 5}]
+    },
+    "Găng tay": {
+        "Găng Đồ Tể": [{t: "Chí Mạng", v: 12}, {t: "Tốc Độ Đánh", v: 8}],
+        "Găng Thần Tốc": [{t: "Tốc Độ Đánh", v: 15}, {t: "Sát thương lên Boss", v: 10}]
+    },
+    "Giày": {
+        "Giày Hermes": [{t: "Tránh Né", v: 15}, {t: "Tốc Độ Di Chuyển", v: 10}],
+        "Giày Thép": [{t: "Tăng DEF", v: 10}, {t: "Giảm sát thương nhận vào", v: 5}]
+    },
+    "Đai": {
+        "Đai Khổng Lồ": [{t: "Tăng HP", v: 30}, {t: "Hồi HP %", v: 2}]
+    },
+    "Nhẫn": {
+        "Nhẫn Ma Vương": [{t: "Tăng ATK", v: 20}, {t: "Thiệt hại đòn Chí mạng", v: 15}]
+    },
+    "Dây chuyền": {
+        "Vòng Cổ Rồng": [{t: "Sát thương lên Boss", v: 25}, {t: "Xuyên Giáp", v: 10}]
+    },
+    "Mũ": {
+        "Mũ Hoàng Gia": [{t: "Tăng ATK", v: 10}, {t: "Tăng DEF", v: 10}, {t: "Giảm hồi chiêu", v: 5}]
+    }
+};
+   
+
+    const daBoTroOptions = {
+        "Vũ khí": ["---", "Đá Sát Thương", "Đá Chí Mạng", "Đá Boss", "Đá CRIT Damage", "Đá Bỏ Qua DEF", "Đá Tăng ATK %", "Đá Tăng HP %", "Đá Đặc Biệt 1", "Đá Đặc Biệt 2"],
+        "Áo Giáp": ["---", "Đá DEF", "Đá HP", "Đá Kháng Hiệu Ứng"],
+        "Găng tay": ["---", "Đá ATK", "Đá Chí Mạng"],
+        "Giày": ["---", "Đá Tránh Né", "Đá Tốc Độ"],
+        "Đai": ["---", "Đá HP", "Đá DEF"],
+        "Nhẫn": ["---", "Đá ATK", "Đá CRIT"],
+        "Dây chuyền": ["---", "Đá Sát Thương", "Đá Boss"],
+        "Mũ": ["---", "Đá Chí Mạng", "Đá Kháng"]
+    };
+
+    function loadInventory() {
+        inventory = JSON.parse(localStorage.getItem(INVENTORY_DB) || '{}');
+        slots.forEach(s => { if (!Array.isArray(inventory[s])) inventory[s] = []; });
+    }
+
+    function saveInventory() {
+        localStorage.setItem(INVENTORY_DB, JSON.stringify(inventory));
+    }
+
+    function render() {
+        let h = '';
+        let listChung = (curV === 'atk') ? chungATK : (curV === 'def' ? chungDEF : chungALL);
+        slots.forEach((s, i) => {
+            h += `<div class="card box relative z-10">
+                <div class="flex justify-between items-center mb-3">
+                    <b class="text-pink-400 uppercase italic text-[9px]">${s}</b>`;
+       
+if (s === "Vũ khí") {
+    h += `<div class="flex gap-2">
+        <select id="classSelect" onchange="changeClass(this.value)" class="vk-select !w-auto !py-0 h-5 text-[8px]">
+            <option value="">-- CLASS --</option>
+            ${Object.keys(classWeapons).map(cls => `<option value="${cls}">${cls}</option>`).join('')}
+        </select>
+        <select id="weaponSelect" onchange="autoFillWeapon(this.value)" class="vk-select !w-auto !py-0 h-5 text-[8px]">
+            <option value="">-- VŨ KHÍ --</option>
+        </select>
+    </div>`;
+} else if (uniqueEquip[s] && Object.keys(uniqueEquip[s]).length > 0) {
+    // Tự động tạo Dropdown cho bất kỳ món nào có dữ liệu trong uniqueEquip
+    h += `<select onchange="autoFillUnique(${i}, this.value)" class="vk-select !w-auto !py-0 h-5 text-[8px]">
+        <option value="">-- ĐỒ ĐỘC NHẤT --</option>
+        ${Object.keys(uniqueEquip[s]).map(itemName => `<option value="${itemName}">${itemName}</option>`).join('')}
+    </select>`;
+}
+            h += `</div>
+            <div class="flex gap-2 mb-3">
+                <select class="inv-select flex-1 text-[8px]" data-slot-index="${i}" onchange="loadFromKho(this)">
+                    <option value="">-- Kho ${s} --</option>
+                    ${(inventory[s] || []).map(item => `<option value="${item.name}">${item.name}</option>`).join('')}
+                </select>
+                <button onclick="saveToKho(${i})" class="btn-p text-[8px] px-3 py-1">LƯU KHO</button>
+            </div>
+            <div class="text-pink-500/80 italic text-[9px] mb-1 ml-1">Thuộc tính</div>`;
+            for (let row = 0; row < 5; row++) {
+                h += `<div class="flex gap-2 mb-2">
+                    <select class="t flex-[2.5]">${listChung.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                    <input type="number" class="v flex-[1] text-center font-bold" value="0">
+                </div>`;
+            }
+            const daOptions = daBoTroOptions[s] || listChung;
+            h += `<div class="mb-3">
+                <div class="text-pink-500/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ</div>
+                <div class="flex gap-2">
+                    <select class="t flex-[2.5]">${daOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                    <input type="number" class="v flex-[1] text-center font-bold" value="0">
+                </div>
+            </div>
+            <div class="mt-4 pt-2 border-t border-zinc-800/50 flex items-center gap-4 text-[9px]">
+                <span class="text-pink-500/80 italic ml-1">Có thể Kế thừa:</span>
+                <label class="flex items-center gap-1.5 cursor-pointer group">
+                    <input type="checkbox" class="chatLuong accent-pink-500 w-3 h-3">
+                    <span class="text-zinc-400 group-hover:text-white transition-colors">Chất lượng</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer group">
+                    <input type="checkbox" class="thuocTinh accent-pink-500 w-3 h-3">
+                    <span class="text-zinc-400 group-hover:text-white transition-colors">Thuộc tính</span>
+                </label>
+            </div></div>`;
+        });
+        document.getElementById('eqs').innerHTML = h;
+        document.querySelectorAll('select, input').forEach(el => el.oninput = calc);
+    }
+// 1. Hàm này để khi chọn Class (Berserker, Paladin...) thì hiện danh sách vũ khí tương ứng
+function changeClass(cls) {
+    const weaponSelect = document.getElementById('weaponSelect');
+    weaponSelect.innerHTML = '<option value="">-- VŨ KHÍ --</option>';
+    
+    if (!cls || !classWeapons[cls]) return;
+
+    // Duyệt qua các chế độ PvE, PvP, Farm của Class đó
+    const modes = classWeapons[cls];
+    for (let mode in modes) {
+        for (let wName in modes[mode]) {
+            let opt = document.createElement('option');
+            // Lưu cả Class và Mode vào value để tí nữa dễ tìm dữ liệu
+            opt.value = JSON.stringify({cls: cls, mode: mode, name: wName});
+            opt.textContent = `[${mode}] ${wName}`;
+            weaponSelect.appendChild(opt);
+        }
+    }
+}
+
+// 2. Hàm này để khi chọn 1 cây kiếm cụ thể, nó tự điền các dòng thuộc tính bên dưới
+function autoFillWeapon(jsonVal) {
+    if (!jsonVal) return;
+    const info = JSON.parse(jsonVal);
+    const stats = classWeapons[info.cls][info.mode][info.name];
+    
+    // Vũ khí luôn là box đầu tiên (index 0)
+    let b = document.querySelectorAll('.box')[0];
+    let selects = b.querySelectorAll('.t');
+    let inputs = b.querySelectorAll('.v');
+
+    // Reset 5 dòng thuộc tính về trống trước khi điền
+    selects.forEach(s => s.value = "---");
+    inputs.forEach(i => i.value = 0);
+
+    // Điền các chỉ số đặc biệt của vũ khí vào
+    stats.forEach((statText, i) => {
+        if (i < selects.length) {
+            let select = selects[i];
+            // Nếu cái option này chưa có trong menu, thì thêm nó vào tạm thời
+            if (![...select.options].some(o => o.value == statText)) {
+                let opt = document.createElement('option');
+                opt.value = opt.text = statText;
+                select.add(opt);
+            }
+            select.value = statText;
+            inputs[i].value = 0; // Các dòng đặc biệt thường không có chỉ số % cộng thêm
+        }
+    });
+    calc(); // Gọi tính toán lại ngay lập tức
+}
+
+// 3. Hàm bổ trợ cho các món đồ Độc Nhất khác (Áo, Găng, Nhẫn...)
+function autoFillUnique(boxIndex, itemName) {
+    if (!itemName) return;
+    
+    const slotName = slots[boxIndex];
+    const itemStats = uniqueEquip[slotName][itemName];
+    if (!itemStats) return;
+
+    let b = document.querySelectorAll('.box')[boxIndex];
+    let selects = b.querySelectorAll('.t');
+    let inputs = b.querySelectorAll('.v');
+
+    // Reset 5 dòng về mặc định trước
+    selects.forEach(s => s.value = "---");
+    inputs.forEach(i => i.value = 0);
+
+    // Điền dữ liệu mới
+    itemStats.forEach((stat, i) => {
+        if (i < selects.length) {
+            let select = selects[i];
+            // Kiểm tra nếu thuộc tính chưa có trong danh sách chọn thì thêm vào
+            if (![...select.options].some(o => o.value == stat.t)) {
+                let opt = document.createElement('option');
+                opt.value = opt.text = stat.t;
+                select.add(opt);
+            }
+            select.value = stat.t;
+            inputs[i].value = stat.v;
+        }
+    });
+
+    calc(); // Tính lại tổng chỉ số ngay lập tức
+}
+    function calc() {
+        let totals = {};
+        document.querySelectorAll('.box').forEach(b => {
+            let ts = b.querySelectorAll('.t'), vs = b.querySelectorAll('.v');
+            ts.forEach((t, i) => {
+                if (t.value !== "---") {
+                    totals[t.value] = (totals[t.value] || 0) + (parseFloat(vs[i].value) || 0);
+                }
+            });
+        });
+        let html = Object.entries(totals).map(([k,v]) => 
+            `<div class="bg-black/40 p-2 rounded-lg border border-zinc-800/50 text-[9px]">
+                <div>${k}</div><b class="text-pink-500 font-extrabold text-[11px]">${v.toFixed(1)}%</b>
+             </div>`
+        ).join('') || '<p class="col-span-full text-center text-zinc-600 italic">Trống...</p>';
+        document.getElementById('res').innerHTML = html;
+    }
+
+    function v(type) { 
+    // Bước 1: Lưu lại dữ liệu hiện tại trước khi đổi tab
+    autoSave();
+    
+    // Bước 2: Đổi trạng thái tab
+    curV = type; 
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+    document.getElementById('b-'+type).classList.add('active'); 
+    
+    // Bước 3: Vẽ lại giao diện mới
+    render(); 
+    
+    // Bước 4: Nạp lại dữ liệu của hồ sơ hiện tại vào các ô vừa vẽ
+    let n = document.getElementById('name').value.trim();
+    if (n) {
+        loadProfile(n);
+    }
+    
+    calc(); 
+}
+
+    async function on() {
+        let n = document.getElementById('name').value.trim();
+        let db = JSON.parse(localStorage.getItem(DB) || '{}');
+        if (!n || !db[n]) return alert('Lưu thợ săn vào máy trước đã!');
+        const chu = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", so = "0123456789";
+        let ma = "";
+        for (let i = 0; i < 4; i++) ma += chu.charAt(Math.floor(Math.random() * chu.length));
+        for (let i = 0; i < 3; i++) ma += so.charAt(Math.floor(Math.random() * so.length));
+        document.getElementById('ma_val').innerText = ma;
+        document.getElementById('cloudModal').classList.remove('hidden');
+        try {
+            fetch(GOOGLE_API, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ ma: ma, raw: JSON.stringify({ n: n, d: db[n] }) })
+            });
+        } catch (e) { console.log("Lưu ngầm lỗi"); }
+    }
+
+    async function nhap() {
+        let ma = prompt('Nhập mã (VD: ABCD123):');
+        if (!ma) return;
+        ma = ma.toUpperCase().trim();
+        if (!/^[A-Z]{4}[0-9]{3}$/.test(ma)) return alert("Mã phải có 4 chữ và 3 số!");
+        try {
+            const response = await fetch(GOOGLE_API + "?ma=" + ma);
+            const txt = await response.text();
+            if (txt === "Not Found") return alert("Không tìm thấy mã này!");
+            const res = JSON.parse(txt);
+            let db = JSON.parse(localStorage.getItem(DB) || '{}');
+            db[res.n] = res.d;
+            localStorage.setItem(DB, JSON.stringify(db));
+            renderListProfile(); 
+            loadProfile(res.n);
+            alert("Đã tải xong: " + res.n);
+        } catch (e) { alert('Lỗi kết nối hoặc mã sai.'); }
+    }
+
+    function hideCloudModal() { document.getElementById('cloudModal').classList.add('hidden'); }
+
+    function luuProfile() {
+        let n = document.getElementById('name').value.trim();
+        if (!n) return alert("Nhập tên đã ông ơi!");
+        let data = Array.from(document.querySelectorAll('.box')).map(b => ({
+            attr: Array.from(b.querySelectorAll('.t')).map((t, i) => ({
+                t: t.value,
+                v: b.querySelectorAll('.v')[i].value
+            })),
+            cl: b.querySelector('.chatLuong')?.checked || false,
+            tt: b.querySelector('.thuocTinh')?.checked || false
+        }));
+        let db = JSON.parse(localStorage.getItem(DB) || '{}');
+        db[n] = data;
+        localStorage.setItem(DB, JSON.stringify(db));
+        renderListProfile();
+        alert("✅ Đã tạo hồ sơ: " + n);
+    }
+
+function autoSave() {
+    let n = document.getElementById('name').value.trim();
+    if (!n) return;
+
+    let data = Array.from(document.querySelectorAll('.box')).map(b => ({
+        attr: Array.from(b.querySelectorAll('.t')).map((t, i) => ({
+            t: t.value,
+            v: b.querySelectorAll('.v')[i].value
+        })),
+        cl: b.querySelector('.chatLuong')?.checked || false,
+        tt: b.querySelector('.thuocTinh')?.checked || false
+    }));
+
+    let db = JSON.parse(localStorage.getItem(DB) || '{}');
+    db[n] = data; // Ghi đè dữ liệu mới vào đúng tên hồ sơ này
+    localStorage.setItem(DB, JSON.stringify(db));
+    
+    // Chỉ cập nhật danh sách hiển thị, không vẽ lại toàn bộ giao diện để tránh lag
+    renderListProfile();
+}
+
+    function loadProfile(n) {
+        let db = JSON.parse(localStorage.getItem(DB) || '{}');
+        if (!db[n]) return;
+        document.getElementById('name').value = n;
+        db[n].forEach((boxData, i) => {
+            let b = document.querySelectorAll('.box')[i];
+            if (!b) return;
+            let attributes = boxData.attr ? boxData.attr : boxData;
+            attributes.forEach((line, j) => {
+                let select = b.querySelectorAll('.t')[j];
+                if (![...select.options].some(o => o.value == line.t)) {
+                    let opt = document.createElement('option'); opt.value = opt.text = line.t;
+                    select.add(opt);
+                }
+                select.value = line.t;
+                b.querySelectorAll('.v')[j].value = line.v;
+            });
+            if (boxData.attr) {
+                if (b.querySelector('.chatLuong')) b.querySelector('.chatLuong').checked = boxData.cl;
+                if (b.querySelector('.thuocTinh')) b.querySelector('.thuocTinh').checked = boxData.tt;
+            }
+        });
+        calc();
+    }
+
+    function renderListProfile() {
+        const listEl = document.getElementById('listProfile');
+        if (!listEl) return;
+        let db = JSON.parse(localStorage.getItem(DB) || '{}');
+        listEl.innerHTML = Object.keys(db).map(n => `
+            <div onmousedown="startTimer('${n}')" onmouseup="clearTimer()" onmouseleave="clearTimer()"
+                 ontouchstart="startTimer('${n}')" ontouchend="clearTimer()"
+                 onclick="loadProfile('${n}')" 
+                 class="bg-zinc-800/50 p-1.5 px-3 rounded-lg cursor-pointer border border-zinc-800 text-[10px] text-zinc-400 hover:border-pink-500 hover:text-white transition-all italic select-none">
+                ${n}
+            </div>`).join('');
+    }
+
+    let pressTimer;
+    function startTimer(name) {
+        clearTimeout(pressTimer);
+        pressTimer = window.setTimeout(() => {
+            if (confirm(`Ông muốn xóa vĩnh viễn hồ sơ [${name}] này không?`)) {
+                let db = JSON.parse(localStorage.getItem(DB) || '{}');
+                delete db[name];
+                localStorage.setItem(DB, JSON.stringify(db));
+                renderListProfile();
+            }
+        }, 800);
+    }
+    function clearTimer() { clearTimeout(pressTimer); }
+
+function saveToKho(index) {
+    const slotName = slots[index];
+    const box = document.querySelectorAll('.box')[index];
+    const itemName = prompt(`Nhập tên lưu cho ${slotName}:`, `Đồ mới ${Date.now().toString().slice(-4)}`);
+    
+    if (!itemName) return;
+
+    // Lấy tất cả các dòng (bao gồm 5 dòng thuộc tính + 1 dòng đá bổ trợ)
+    const allSelects = box.querySelectorAll('.t');
+    const allInputs = box.querySelectorAll('.v');
+
+    const itemData = {
+        name: itemName,
+        // Lưu toàn bộ 6 dòng (5 thuộc tính + 1 đá)
+        attr: Array.from(allSelects).map((sel, i) => ({
+            t: sel.value,
+            v: allInputs[i].value
+        })),
+        // Lưu trạng thái 2 checkbox đặc trưng của ông
+        cl: box.querySelector('.chatLuong')?.checked || false,
+        tt: box.querySelector('.thuocTinh')?.checked || false
+    };
+
+    if (!inventory[slotName]) inventory[slotName] = [];
+    inventory[slotName].push(itemData);
+    
+    saveInventory(); // Lưu vào LocalStorage
+    render();        // Cập nhật lại danh sách chọn ở màn hình chính
+    alert(`Đã cất [${itemName}] vào kho!`);
+}
+
+
+function showKho() {
+    const modal = document.getElementById('khoModal');
+    const content = document.getElementById('khoContent');
+    const total = document.getElementById('totalItems');
+    
+    // Nạp lại dữ liệu từ máy trước khi hiện
+    loadInventory(); 
+
+    modal.classList.remove('hidden');
+    content.innerHTML = '';
+    let count = 0;
+
+    slots.forEach((s) => {
+        const items = inventory[s] || [];
+        if (items.length > 0) {
+            let section = `<div class="mb-8 p-1">
+                <div class="text-pink-400 font-extrabold text-[11px] uppercase tracking-wider mb-4 border-b-2 border-pink-900/40 pb-1.5 ml-1">
+                    ● ${s.toUpperCase()} (${items.length} MÓN)
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">`;
+            
+            items.forEach((item, itemIdx) => {
+                count++;
+                
+                // Lọc bỏ các dòng trống "---" để hiển thị
+                const attrs = Array.isArray(item.attr) ? item.attr : [];
+                const validAttrs = attrs.filter(a => a && a.t !== "---");
+
+                // Tạo HTML cho phần chỉ số (dạng cột: Tên - %)
+                let statsHtml = '';
+                validAttrs.forEach(a => {
+                    // Dòng chỉ số dạng cột: Tên bên trái, % bên phải
+                    statsHtml += `
+                        <div class="flex justify-between items-center text-[10px] leading-relaxed group">
+                            <span class="text-zinc-400 group-hover:text-white transition-colors">${a.t}</span>
+                            <b class="text-pink-400 font-bold ml-3 text-right">${a.v}%</b>
+                        </div>`;
+                });
+
+                // Khối giao diện món đồ hoàn chỉnh (giống ảnh ông gửi)
+                section += `
+                    <div class="bg-zinc-200/40 p-5 rounded-2xl border border-zinc-700/60 flex flex-col justify-between hover:border-pink-500/50 transition-all hover:shadow-[0_0_15px_-3px_rgba(236,72,153,0.3)] hover:-translate-y-0.5">
+                        <div class="mb-4 pr-1">
+                            <div class="flex justify-between items-center gap-3 mb-4">
+                                <b class="text-white text-[13px] font-extrabold truncate flex-1 tracking-tight">${item.name || 'Món đồ chưa đặt tên'}</b>
+                                <div class="flex gap-1.5 shrink-0">
+                                    <button onclick="loadFromKhoDirectly('${s}', ${itemIdx})" 
+                                            class="bg-emerald-600/90 hover:bg-emerald-500 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
+                                        MẶC
+                                    </button>
+                                    <button onclick="deleteFromKho('${s}', ${itemIdx})" 
+                                            class="bg-red-600/90 hover:bg-red-500 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
+                                        XÓA
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-1.5 border-t border-zinc-700/60 pt-3">
+                                ${statsHtml || '<p class="text-[10px] text-zinc-600 italic">Món đồ này chưa có chỉ số.</p>'}
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-3 border-t border-zinc-700/50 flex items-center gap-4 text-[9px]">
+                            <span class="text-pink-500/70 italic font-medium">Có thể Kế thừa:</span>
+                            <label class="flex items-center gap-1.5 ${item.cl ? 'text-pink-400 font-bold' : 'text-zinc-600'}">
+                                <span class="w-3.5 h-3.5 rounded border border-current flex items-center justify-center text-[8px]">${item.cl ? '✓' : ''}</span> 
+                                CL
+                            </label>
+                            <label class="flex items-center gap-1.5 ${item.tt ? 'text-pink-400 font-bold' : 'text-zinc-600'}">
+                                <span class="w-3.5 h-3.5 rounded border border-current flex items-center justify-center text-[8px]">${item.tt ? '✓' : ''}</span> 
+                                TT
+                            </label>
+                        </div>
+                    </div>`;
+            });
+            section += `</div></div>`;
+            content.innerHTML += section;
+        }
+    });
+
+    total.innerText = count;
+    if (count === 0) content.innerHTML = '<p class="text-center text-zinc-500 italic py-10">Kho trống trơn ông ơi, đi farm đồ rồi lưu vào đây nhé!</p>';
+}
+  
+function hideKho() { document.getElementById('khoModal').classList.add('hidden'); }
+
+function loadFromKho(el) {
+    const slotIdx = el.getAttribute('data-slot-index');
+    const itemName = el.value;
+    if (!itemName) return; 
+
+    const slotName = slots[slotIdx];
+    const item = inventory[slotName].find(i => i.name === itemName);
+    
+    if (item) {
+        const box = document.querySelectorAll('.box')[slotIdx];
+        const allSelects = box.querySelectorAll('.t');
+        const allInputs = box.querySelectorAll('.v');
+
+        // BỘ LỌC AN TOÀN: Lấy mảng an toàn
+        const attrs = Array.isArray(item.attr) ? item.attr : [];
+
+        attrs.forEach((line, j) => {
+            if (line && j < allSelects.length) { 
+                let select = allSelects[j];
+                if (![...select.options].some(o => o.value == line.t)) {
+                    let opt = document.createElement('option'); 
+                    opt.value = opt.text = line.t;
+                    select.add(opt);
+                }
+                select.value = line.t;
+                allInputs[j].value = line.v || 0;
+            }
+        });
+        
+        if (box.querySelector('.chatLuong')) box.querySelector('.chatLuong').checked = item.cl || false;
+        if (box.querySelector('.thuocTinh')) box.querySelector('.thuocTinh').checked = item.tt || false;
+        
+        calc();
+    }
+}
+
+// HÀM MỚI NÀY ĐỂ XỬ LÝ NÚT 'LOAD' TRONG BẢNG KHO
+function loadFromKhoDirectly(slotName, itemIdx) {
+    const item = inventory[slotName][itemIdx];
+    if (!item) return;
+
+    // Tìm xem món đồ này nằm ở vị trí thứ mấy ngoài màn hình chính (Vũ khí=0, Áo=1...)
+    const slotIdx = slots.indexOf(slotName);
+    if (slotIdx === -1) return;
+
+    const box = document.querySelectorAll('.box')[slotIdx];
+    const allSelects = box.querySelectorAll('.t');
+    const allInputs = box.querySelectorAll('.v');
+
+    // Nạp lại 6 dòng thuộc tính
+    const attrs = Array.isArray(item.attr) ? item.attr : [];
+    attrs.forEach((line, j) => {
+        if (j < allSelects.length) { 
+            let select = allSelects[j];
+            if (![...select.options].some(o => o.value == line.t)) {
+                let opt = document.createElement('option'); 
+                opt.value = opt.text = line.t;
+                select.add(opt);
+            }
+            select.value = line.t;
+            allInputs[j].value = line.v || 0;
+        }
+    });
+    
+    // Nạp lại trạng thái checkbox Chất lượng/Thuộc tính (Logic gốc của ông)
+    if (box.querySelector('.chatLuong')) box.querySelector('.chatLuong').checked = item.cl || false;
+    if (box.querySelector('.thuocTinh')) box.querySelector('.thuocTinh').checked = item.tt || false;
+    
+    // Tính toán lại tổng chỉ số ngoài màn hình chính
+    calc(); 
+    
+    // Đóng bảng kho sau khi nạp
+    hideKho(); 
+    
+    alert(`Đã nạp món [${item.name}] ra màn hình chính để sử dụng!`);
+}
+
+function deleteFromKho(slotName, itemIdx) {
+    // Hỏi nhẹ một câu cho chắc cú kẻo xóa nhầm
+    if (confirm(`Ông có chắc muốn vứt món [${inventory[slotName][itemIdx].name}] này đi không?`)) {
+        inventory[slotName].splice(itemIdx, 1); // Xóa khỏi mảng
+        saveInventory(); // Lưu lại vào máy
+        showKho();       // Cập nhật lại giao diện bảng Kho đang mở
+        render();        // Cập nhật lại mấy cái Dropdown bên ngoài màn hình chính
+    }
+}
+
+
+    window.onload = () => { 
+        loadInventory();
+        render(); 
+        renderListProfile();
+    };
+</script>
+</body>
+</html>
