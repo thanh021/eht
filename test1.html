@@ -342,7 +342,7 @@ select option {
    // 1. Gom tất cả thuộc tính vào 1 danh sách duy nhất
 const attrs = [
     "---",
-      // === Nhóm 1 ===
+      
     "HP Tăng",
     "Tránh Né Tăng",
     "Tổng DEF Tăng",
@@ -368,60 +368,352 @@ const slots = ["Vũ khí", "Áo Giáp", "Găng tay", "Giày", "Đai", "Nhẫn", 
 // 3. Kho đồ (để trống ban đầu)
 let inventory = {};
 
-    const classWeapons = {
-        "Berserker": {
-            "PvE": {
-                "Kiếm bóng tối": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Vết nứt bóng tối với xác suất 15~25%", "11~23% Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
-                "Kiếm bóng tối Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Vết nứt bóng tối với xác suất 15~25%", "14~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"],
-                "Lưỡi kiếm độc": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Với xác suất 15~30% gây sát thương gấp 3", "11~23% Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
-                "Lưỡi kiếm độc Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Với xác suất 15~30% gây sát thương gấp 3", "14~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"],
-                "Kiếm Băng Giá": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Khi tấn công Quái vật, có 15~25% khả năng thi triển Con băng giá", "16~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"]
-            },
-            "PvP": {},
-            "Farm Field": {}
+  const classWeapons = {
+    "Berserker": {
+        "Boss": {
+            "Kiếm bóng tối": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Vết nứt bóng tối với xác suất 15~25%", "11~23% Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Kiếm bóng tối Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Vết nứt bóng tối với xác suất 15~25%", "14~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"],
+            "Lưỡi kiếm độc": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Với xác suất 15~30% gây sát thương gấp 3", "11~23% Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Lưỡi kiếm độc Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Với xác suất 15~30% gây sát thương gấp 3", "14~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"],
+            "Kiếm Băng Giá": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Khi tấn công Quái vật, có 15~25% khả năng thi triển Con băng giá", "16~26% Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "25~40% Thiệt hại do đòn chí mạng Tăng"]
         },
-        "Paladin": {}, "Sorcerer": {}, "Ranger": {}, "DarkKnight": {}
-    };
+        "PvP": {
+            "Valkalla": ["Bỏ qua 12~30% phòng thủ của địch và gây sát thương", "sát thương lên Quái Nhân Tăng", "Tổng ATK Tăng"],
+            "Valkalla tối thượng": ["Bỏ qua 15~33% phòng thủ của địch và gây sát thương", "sát thương lên Quái Nhân Tăng", "Tổng ATK Tăng"],
+            "Valkalla chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "sát thương lên Quái Nhân Tăng", "Tổng ATK Tăng", "sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Fenrir chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "Gây 15~30% sát thương cho kẻ địch có HP dưới 50%", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Fenrir tối thượng": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "Gây 15~30% sát thương cho kẻ địch có HP dưới 50% Tăng", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"],
+            "Kiếm của Ares": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "Cuồng Nộ Chiến Binh - Giai đoạn 1~3", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"]
+        },
+        "Farm Field": {
+            "Kiếm Hỗn độn": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 80},
+                {t: "HP Tăng", v: 52},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 52}
+            ],
+            "Kiếm Vực Thẳm": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 90},
+                {t: "HP Tăng", v: 58},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 58}
+            ]
+        }
+    },
+
+    "DarkKnight": {
+        "Boss": {
+            "Thương Hắc Ám": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "15~25% tỉ lệ thi triển Hào Quang Nguyền Rủa", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Thương Hắc Ám Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "15~25% tỉ lệ thi triển Hào Quang Nguyền Rủa", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Thương Nanh Độc": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "15~25% tỉ lệ thi triển Nanh Độc", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Thương Nanh Độc Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "15~25% tỉ lệ thi triển Nanh Độc", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Thương Băng Giá": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "15~25% tỉ lệ thi triển Trái Tim Băng Giá", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"]
+        },
+        "PvP": {
+            "Trishula": ["Bỏ qua 12~30% phòng thủ của địch và gây sát thương", "13~23% tỉ lệ thi triển Cú Đánh Hủy Diệt", "Tổng ATK Tăng"],
+            "Cực Trishula": ["Bỏ qua 15~33% phòng thủ của địch và gây sát thương", "15~25% tỉ lệ thi triển Cú Đánh Hủy Diệt", "Tổng ATK Tăng"],
+            "Chân Trishula": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "15~25% tỉ lệ thi triển Cú Đánh Hủy Diệt", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Chân Gungnir": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "Bỏ qua 10~20% Né tránh của kẻ địch và gây sát thương", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Siêu Cực Gungnir": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "Bỏ qua 10~20% Né tránh của kẻ địch và gây sát thương", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"],
+            "Thương Poseidon": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "15~25% tỉ lệ thi triển Trận Thủy Linh", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"]
+        },
+        "Farm Field": {
+            "Thương Hỗn độn": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 80},
+                {t: "HP Tăng", v: 52},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 52}
+            ],
+            "Thương Vực Thẳm": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 90},
+                {t: "HP Tăng", v: 58},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 58}
+            ]
+        }
+    },
+
+    "Paladin": {
+        "Boss": {
+            "Rìu bóng tối": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Ánh sáng bóng tối với xác suất 15~25%", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Rìu bóng tối Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Ánh sáng bóng tối với xác suất 15~25%", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Lưỡi hái độc": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Aura độc với xác suất 15~25%", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Lưỡi hái độc Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "gây Aura độc với xác suất 15~25%", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Búa Lava": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "15~25% khả năng thi triển Con rồng Lava", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            
+        },
+        "PvP": {"Mjolnir": ["Bỏ qua 12~30% phòng thủ của địch và gây sát thương", "có 13~23% khả năng thi triển Lôi Triển cấp 1", "Tổng ATK"],
+            "Mjolnir Tối Thượng": ["Bỏ qua 15~33% phòng thủ của địch và gây sát thương", "15~25% khả năng thi triển Lôi Triển cấp 1", "Tổng ATK Tăng"],
+            "Mjolnir chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "15~25% khả năng thi triển Lôi Triển cấp 1", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Mahes chân chính": ["10~20% khả năng thi triển Tránh Né cấp 1", "Giảm 10~20% lượng sát thương phải nhận khi dùng kỹ năng Lá Chắn", "HP Tăng", "Giảm 10~25% sát thương CRIT phải nhận"],
+            "Mahes tối thượng": ["15~25% khả năng thi triển Tránh Né cấp 1", "Giảm 10~20% lượng sát thương phải nhận khi dùng kỹ năng Lá Chắn", "HP Tăng", "Giảm 13~28% sát thương CRIT phải nhận", "Giảm Sát thương nhận từ Thợ săn 10~25%"],
+            "Búa của Helios": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "10~25% tỉ lệ thi triển Hào Quang Mặt Trời", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"]}, 
+        "Farm Field": {
+            "Búa Hỗn độn": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 80},
+                {t: "HP Tăng", v: 52},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 52}
+            ],
+            "Búa Vực Thẳm": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 90},
+                {t: "HP Tăng", v: 58},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 58}
+            ]
+        }
+    },
+
+    "Ranger": {
+        "Boss": {
+            "Cung độc": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Mưa độc với xác suất 25~35%", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Cung độc Nâng Cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Mưa độc với xác suất 25~35%", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Cung bóng tối": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Ảnh Lông Vũ với xác suất 25~35%", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Cung bóng tối Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Ảnh Lông Vũ với xác suất 25~35%", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Cung Băng Giá": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "25~35% khả năng thi triển Linh hồn Băng Giá", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"]
+        },
+        "PvP": {
+            "Vijaya": ["Bỏ qua 12~30% phòng thủ của địch và gây sát thương", "Có 13~28% khả năng gây sát thương gấp ba", "Tổng ATK Tăng"],
+            "Vijaya Tối Thượng": ["Bỏ qua 15~33% phòng thủ của địch và gây sát thương", "Có 15~30% khả năng gây sát thương gấp ba", "Tổng ATK Tăng"],
+            "Vijaya chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "Có 15~30% khả năng gây sát thương gấp ba", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Gandiva chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "Bão Lửa với xác suất 15~25%", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Gandiva tối thượng": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "Bão Lửa với xác suất 25~35%", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"],
+            "Cung của Artemis": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "Thi triển Phân Thân với tỉ lệ 35-50% khi xạ thủ dùng kỹ năng tấn công", "% Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"]
+        },
+        "Farm Field": {
+            "Cung Hỗn độn": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 80},
+                {t: "HP Tăng", v: 52},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 52}
+            ],
+            "Cung Vực Thẳm": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 90},
+                {t: "HP Tăng", v: 58},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 58}
+            ]
+        }
+    },
+
+    "Sorcerer": {
+        "Boss": {
+            "Gậy bóng tối": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Soul Eater với xác suất 15~25%", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Gậy bóng tối Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Soul Eater với xác suất 15~25%", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Gậy độc": ["Bỏ qua 30~50% DEF Quái vật và gây sát thương", "Devour với xác suất 5~15%", "Tổng ATK Tăng", "20~35% sát thương gây cho quái vật Tăng"],
+            "Gậy độc Nâng cấp": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "Devour với xác suất 5~15%", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"],
+            "Gậy lửa": ["Bỏ qua 35~55% DEF Quái vật và gây sát thương", "15~25% khả năng thi triển Quyền năng nguyên thủy", "Tổng ATK Tăng", "25~40% sát thương gây cho quái vật Tăng", "Thiệt hại do đòn chí mạng Tăng"]
+        },
+        "PvP": {
+            "Immortal": ["Bỏ qua 12~30% phòng thủ của địch và gây sát thương", "11~21% khả năng thi triển Cuồng Nộ cấp 1", "Tổng ATK Tăng"],
+            "Immortal Tối Thượng": ["Bỏ qua 15~33% phòng thủ của địch và gây sát thương", "13~23% khả năng thi triển Cuồng Nộ cấp 1", "Tổng ATK Tăng"],
+            "Immortal chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "13~23% khả năng thi triển Cuồng Nộ cấp 1", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Isis chân chính": ["Bỏ qua 18~36% phòng thủ của địch và gây sát thương", "15~25% thời gian chờ kỹ năng Giảm", "Tổng ATK Tăng", "35~50% sát thương CRIT gây cho Quái Nhân Tăng"],
+            "Isis tối thượng": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "15~25% thời gian chờ kỹ năng Giảm", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"],
+            "Gậy của Uranus": ["Bỏ qua 21~39% phòng thủ của địch và gây sát thương", "Chúa Tể Bầu Trời - Giai đoạn 1~3 (Luôn kích hoạt)", "Tổng ATK Tăng", "40~55% sát thương CRIT gây cho Quái Nhân Tăng", "Sát thương gây lên Thợ săn 1~5% Tăng"]
+        },
+        "Farm Field": {
+            "Gậy Hỗn độn": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 80},
+                {t: "HP Tăng", v: 52},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 52}
+            ],
+            "Gậy Vực Thẳm": [
+                {t: "Thiệt hại do đòn chí mạng Tăng", v: 90},
+                {t: "HP Tăng", v: 58},
+                {t: "Xác suất nhận Tài Nguyên cao cấp Tăng", v: 58}
+            ]
+        }
+    },
+
+   
+};
 
 
-  const uniqueEquip = {
+const uniqueEquip = {
     "Áo Giáp": {
-        "Áo Choàng Lửa": [{t: "Tăng DEF", v: 15.5}, {t: "Kháng hiệu ứng", v: 10}, {t: "Phản sát thương", v: 0}],
-        "Giáp Thiên Thần": [{t: "Tăng HP", v: 25}, {t: "Hồi phục mỗi giây", v: 5}]
+        "Giáp hỗn độn": [
+            { t: "Tổng ATK Tăng", v: 26 },
+            { t: "Giảm sát thương phải chịu", v: 19 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Giáp vực thẳm": [
+            { t: "Tổng ATK Tăng", v: 29 },
+            { t: "Giảm sát thương phải chịu", v: 21 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Áo Người khổng lồ Sương giá": [
+            { t: "Khi bị tấn công, có n% xác suất kích hoạt Làn sóng Sương Giá", v: 0 }
+        ],
+        "Áo Người đau khổ": [
+            { t: "Khi bị tấn công, hồi phục n% No đủ, Thể lực, Tâm trạng", v: 0 }
+        ]
     },
-    "Găng tay": {
-        "Găng Đồ Tể": [{t: "Chí Mạng", v: 12}, {t: "Tốc Độ Đánh", v: 8}],
-        "Găng Thần Tốc": [{t: "Tốc Độ Đánh", v: 15}, {t: "Sát thương lên Boss", v: 10}]
-    },
-    "Giày": {
-        "Giày Hermes": [{t: "Tránh Né", v: 15}, {t: "Tốc Độ Di Chuyển", v: 10}],
-        "Giày Thép": [{t: "Tăng DEF", v: 10}, {t: "Giảm sát thương nhận vào", v: 5}]
-    },
-    "Đai": {
-        "Đai Khổng Lồ": [{t: "Tăng HP", v: 30}, {t: "Hồi HP %", v: 2}]
-    },
+
     "Nhẫn": {
-        "Nhẫn Ma Vương": [{t: "Tăng ATK", v: 20}, {t: "Thiệt hại đòn Chí mạng", v: 15}]
+        "Nhẫn hỗn độn": [
+            { t: "Tránh Né Tăng", v: 14 },
+            { t: "Thiệt hại do đòn chí mạng Tăng", v: 40 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Nhẫn vực thẳm": [
+            { t: "Tránh Né Tăng", v: 16 },
+            { t: "Thiệt hại do đòn chí mạng Tăng", v: 45 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Nhẫn Ly Tâm": [
+            { t: "Thời gian duy trì Kỹ Năng Ly Tâm Tăng", v: 1 }
+        ],
+        "Nhẫn 3 ngôi": [
+            { t: "Thống nhất thế giới Giai đoạn 1-3", v: 1 }
+        ]
     },
+
+    "Đai": {
+        "Đai hỗn độn": [
+            { t: "HP Tăng", v: 26 },
+            { t: "Sát thương lên Boss Tăng", v: 40 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Đai Vực Thẳm": [
+            { t: "HP Tăng", v: 29 },
+            { t: "Sát thương lên Boss Tăng", v: 45 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Đai lưng của Sylph": [
+            { t: "20% cơ hội kích hoạt phước lành của Sylph giai đoạn 1-3", v: 0 }
+        ],
+        "Vành đai Nhà giả kim": [
+            { t: "Xác suất 25% không bị trừ lượng dược liệu", v: 0 }
+        ],
+        "Thắt lưng Rồng Sấm": [
+            { t: "Phẫn nộ Rồng Sấm cường hóa lv.N luôn được kích hoạt", v: 0 }
+        ]
+    },
+
     "Dây chuyền": {
-        "Vòng Cổ Rồng": [{t: "Sát thương lên Boss", v: 25}, {t: "Xuyên Giáp", v: 10}]
+        "Dây chuyền hỗn độn": [
+            { t: "Tránh Né Tăng", v: 14 },
+            { t: "Thiệt hại do đòn chí mạng Tăng", v: 40 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Dây chuyền vực thẳm": [
+            { t: "Tránh Né Tăng", v: 16 },
+            { t: "Thiệt hại do đòn chí mạng Tăng", v: 45 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Vòng cổ Đội trưởng Cảnh vệ": [
+            { t: "Kích hoạt Đặc Quyền của Đội trưởng Cảnh vệ", v: 0 }
+        ],
+        "Vòng cổ Hades": [
+            { t: "Kích hoạt vua Thế giới ngầm giai đoạn 1-3", v: 0 }
+        ]
     },
+
     "Mũ": {
-        "Mũ Hoàng Gia": [{t: "Tăng ATK", v: 10}, {t: "Tăng DEF", v: 10}, {t: "Giảm hồi chiêu", v: 5}]
+ 	"Đai Mũ hỗn độn": [
+            { t: "HP Tăng", v: 26 },
+            { t: "Sát thương lên Boss Tăng", v: 40 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Đai Mũ Vực Thẳm": [
+            { t: "HP Tăng", v: 29 },
+            { t: "Sát thương lên Boss Tăng", v: 45 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Mũ Juggaernaut": [
+            { t: "Tốc độ di chuyển và Tổng ATK Tăng 30% cho Thợ Săn có Tính Cách Yolo", v: 0 }
+        ],
+        "Mũ phù thủy bí ngô": [
+            { t: "Có 15% xác suất kích hoạt Bí ngô Hoán đổi", v: 0 }
+        ]
+    },
+
+    "Giày": {
+        "Giày hỗn độn": [
+            { t: "Tổng ATK Tăng", v: 26 },
+            { t: "Giảm sát thương phải chịu", v: 19 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Giày vực thẳm": [
+            { t: "Tổng ATK Tăng", v: 29 },
+            { t: "Giảm sát thương phải chịu", v: 21 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Giày Bất khuất": [
+            { t: "Khi bị tấn công với hiệu ứng trạng thái giới hạn hành động, sát thương phải nhận giảm n% trong 6 giây", v: 0 }
+        ],
+        "Giày Gió": [
+            { t: "Khuếch đại ATK một lượng bằng 10% lượng tăng tốc độ di chuyển (giới hạn 30%)", v: 0 }
+        ]
+    },
+
+    "Găng tay": {
+        "Tay hỗn độn": [
+            { t: "Tổng ATK Tăng", v: 26 },
+            { t: "Giảm sát thương phải chịu", v: 19 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 26 }
+        ],
+        "Tay vực thẳm": [
+            { t: "Tổng ATK Tăng", v: 29 },
+            { t: "Giảm sát thương phải chịu", v: 21 },
+            { t: "Xác suất nhận Tài nguyên cao cấp Tăng", v: 29 }
+        ],
+        "Găng Bloodfist": [
+            { t: "Berserk đẫm máu giai đoạn n luôn được kích hoạt", v: 0 }
+        ],
+        "Găng Hecate": [
+            { t: "Khi bị tấn công, có n% xác suất kích hoạt Chuỗi lời nguyền", v: 0 }
+        ]
     }
 };
    
 
-    const daBoTroOptions = {
-        "Vũ khí": ["---", "Đá Sát Thương", "Đá Chí Mạng", "Đá Boss", "Đá CRIT Damage", "Đá Bỏ Qua DEF", "Đá Tăng ATK %", "Đá Tăng HP %", "Đá Đặc Biệt 1", "Đá Đặc Biệt 2"],
-        "Áo Giáp": ["---", "Đá DEF", "Đá HP", "Đá Kháng Hiệu Ứng"],
-        "Găng tay": ["---", "Đá ATK", "Đá Chí Mạng"],
-        "Giày": ["---", "Đá Tránh Né", "Đá Tốc Độ"],
-        "Đai": ["---", "Đá HP", "Đá DEF"],
-        "Nhẫn": ["---", "Đá ATK", "Đá CRIT"],
-        "Dây chuyền": ["---", "Đá Sát Thương", "Đá Boss"],
-        "Mũ": ["---", "Đá Chí Mạng", "Đá Kháng"]
-    };
+   // Danh sách chỉ số đá thường dùng chung cho tất cả
+const danhSachDaThuong = [
+    "---",
+    "HP Tăng",
+    "Tránh Né Tăng",
+    "Tổng DEF Tăng",
+    "Giảm sát thương phải chịu",
+    "Tổng ATK Tăng",
+    "Tốc độ tấn công Tăng",
+    "Xác suất chí mạng Tăng",
+    "Thiệt hại do đòn chí mạng Tăng",
+    "Sát thương lên Quái Nhân Tăng",
+    "Sát thương lên Boss Tăng",
+    "Sát thương lên Quỷ Tăng",
+    "Sát thương lên Xác Sống Tăng",
+    "Sát thương lên Thú Tăng",
+    "Hút máu",
+    "Tốc độ di chuyển Tăng",
+    "Khi tấn công, sát thương thêm n% so với thiệt hại",
+    "Khi tấn công, có n% khả năng hồi 3% Tâm trạng/No Đủ/Thể Lực",
+    "n% Tiêu hao Tâm trạng/No Đủ/Thể Lực giảm"
+];
+
+// Gán danh sách đá thường cho 7 món trang bị
+const daBoTroOptions = {
+    "Áo Giáp": danhSachDaThuong,
+    "Găng tay": danhSachDaThuong,
+    "Giày": danhSachDaThuong,
+    "Đai": danhSachDaThuong,
+    "Nhẫn": danhSachDaThuong,
+    "Dây chuyền": danhSachDaThuong,
+    "Mũ": danhSachDaThuong
+};
+
+// Đá bổ trợ cho Vũ khí (2 loại)
+// Đá bổ trợ cho Vũ khí (2 loại)
+const daBoTroVuKhi = {
+    "Đá bổ trợ kỹ năng": [
+        "---", 
+        // Paladin
+        "Ánh Sáng Thần", "Ban Phước", "Vũ Khí Bạc", "Dark Weapon", "Defensive Aura", "Hands of God", "Execution",
+        // Sorcerer
+        "Lôi Tiễn", "Bão Tuyết", "Đá Nguyền Rủa", "Meteor", "Summon Familliar", "Polymorph", "Nightmare",
+        // Ranger
+        "Liên Thanh", "Mưa Tiễn", "Bắn Tỉa", "Summon Phoenix", "Song of Peace", "Bom độc", "Mystic Arrow",
+        // Berserker
+        "Cuồng Nộ", "Vũ Khí Đôi", "Death Coil", "Pulverizer", "Battle Shout", "Aura Blade", "Cyclone",
+        // Dark Knight
+        "Chém Vòng Cung", "Kỵ Thuật Chiến Mã", "Đột Kích Bóng Đêm", "Xoáy Trảm", "Đâm Xuyên Phá", "Thương Bóng Ảnh", "Hơi Thở Rồng"
+    ],
+    "Đá bổ trợ thường": danhSachDaThuong // Dùng chung danh sách ở trên luôn cho khỏe
+
+};
 
 let curV = 'all';
 
@@ -486,6 +778,7 @@ function setNumericDisplay(inputEl, value) {
 
             <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Thuộc tính</div>`;
 
+            // 5 dòng Thuộc tính
             for (let row = 0; row < 5; row++) {
                 h += `<div class="flex gap-2 mb-2">
                     <select class="t flex-[2.5]">${listChung.map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
@@ -493,16 +786,38 @@ function setNumericDisplay(inputEl, value) {
                 </div>`;
             }
 
-            let daOptions = (typeof daBoTroOptions !== 'undefined' && daBoTroOptions[s]) ? daBoTroOptions[s] : listChung;
-            h += `<div class="mb-3">
-                <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ</div>
-                <div class="flex gap-2">
-                    <select class="t flex-[2.5]">${daOptions.map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
-                    <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="">
-                </div>
-            </div>
+                       // === PHẦN ĐÁ BỔ TRỢ ===
+            if (s === "Vũ khí") {
+                // Đá bổ trợ Thường nằm trên
+                h += `<div class="mb-3">
+                    <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ</div>
+                    <div class="flex gap-2">
+                        <select class="t flex-[2.5]">${daBoTroVuKhi["Đá bổ trợ thường"].map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
+                        <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="">
+                    </div>
+                </div>`;
 
-            <div class="mt-4 pt-2 border-t border-zinc-800/50 flex items-center gap-4 text-[9px]">
+                // Đá bổ trợ Kỹ năng nằm dưới
+                h += `<div class="mb-3">
+                    <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ Kỹ năng</div>
+                    <div class="flex gap-2">
+                        <select class="t flex-[2.5]">${daBoTroVuKhi["Đá bổ trợ kỹ năng"].map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
+                        <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="">
+                    </div>
+                </div>`;
+            } else {
+                let daOptions = (typeof daBoTroOptions !== 'undefined' && daBoTroOptions[s]) ? daBoTroOptions[s] : ["---"];
+                h += `<div class="mb-3">
+                    <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ</div>
+                    <div class="flex gap-2">
+                        <select class="t flex-[2.5]">${daOptions.map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
+                        <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="">
+                    </div>
+                </div>`;
+            }
+
+            // Phần "Có thể Kế thừa"
+            h += `<div class="mt-4 pt-2 border-t border-zinc-800/50 flex items-center gap-4 text-[9px]">
                 <span class="text-sky-400/80 italic ml-1">Có thể Kế thừa:</span>
                 <label class="flex items-center gap-1.5 cursor-pointer">
                     <input type="checkbox" class="chatLuong accent-sky-500 w-3.5 h-3.5">
@@ -518,27 +833,24 @@ function setNumericDisplay(inputEl, value) {
     });
 
     document.getElementById('eqs').innerHTML = h;
+	document.querySelectorAll('#eqs select.t, #eqs input.v').forEach(el => {
+    el.oninput = () => { calc(); autoSave(); };
+});
 
-    document.querySelectorAll('#eqs select, #eqs input').forEach(el => {
-        el.oninput = () => { calc(); autoSave(); };
-    });
-
-// Tự động xóa số 0 khi chọn "---"
-document.querySelectorAll('.box').forEach(box => {
-    const selects = box.querySelectorAll('.t');
-    const inputs = box.querySelectorAll('.v');
-    
-    selects.forEach((sel, i) => {
-        sel.addEventListener('change', () => {
-            if (sel.value === '---') {
-                inputs[i].value = '';
-            } else {
-                // Nếu gõ 0 thủ công thì cũng chuyển thành khoảng trắng
-                if (inputs[i].value === '0') inputs[i].value = '';
-            }
+    // Tự động xóa số 0 khi chọn "---"
+    document.querySelectorAll('.box').forEach(box => {
+        const selects = box.querySelectorAll('.t');
+        const inputs = box.querySelectorAll('.v');
+        selects.forEach((sel, i) => {
+            sel.addEventListener('change', () => {
+                if (sel.value === '---') {
+                    inputs[i].value = '';
+                } else {
+                    if (inputs[i].value === '0') inputs[i].value = '';
+                }
+            });
         });
     });
-});
     calc();
 }
 
@@ -587,7 +899,71 @@ function autoFillWeapon(jsonVal) {
     calc();
     autoSave();
 }
+function changeClass(cls) {
+    const wpSelect = document.getElementById('weaponSelect');
+    wpSelect.innerHTML = '<option value="">-- VŨ KHÍ --</option>'; // Reset danh sách cũ
 
+    if (cls && classWeapons[cls]) {
+        // Gom tất cả vũ khí từ PvE, PvP và Farm Field vào 1 danh sách để chọn
+        for (let cat in classWeapons[cls]) {
+            for (let wp in classWeapons[cls][cat]) {
+                let opt = document.createElement('option');
+                opt.value = wp;
+                opt.text = `[${cat}] ${wp}`;
+                wpSelect.add(opt);
+            }
+        }
+    }
+}
+
+function autoFillWeapon(wpName) {
+    if (!wpName) return;
+    
+    // Tìm xem vũ khí này thuộc Class nào và Nhóm nào
+    const cls = document.querySelector('select[onchange="changeClass(this.value)"]').value;
+    let weaponStats = null;
+
+    if (classWeapons[cls]) {
+        for (let cat in classWeapons[cls]) {
+            if (classWeapons[cls][cat][wpName]) {
+                weaponStats = classWeapons[cls][cat][wpName];
+                break;
+            }
+        }
+    }
+
+    if (!weaponStats) return;
+
+    // Lấy slot Vũ khí (thường là ô đầu tiên - index 0)
+    let b = document.querySelectorAll('.box')[0]; 
+    let selects = b.querySelectorAll('.t');
+    let inputs = b.querySelectorAll('.v');
+
+    // Reset các ô cũ về mặc định
+    selects.forEach(s => s.value = "---");
+    inputs.forEach(i => setNumericDisplay(i, 0));
+
+    // Điền chỉ số mới vào
+    weaponStats.forEach((stat, i) => {
+        if (i < selects.length) {
+            const isObject = typeof stat === 'object';
+            const labelText = isObject ? stat.t : stat;
+            const valueNum = isObject ? stat.v : 0;
+
+            // Nếu trong danh sách attrs chưa có dòng này thì thêm vào option
+            if (![...selects[i].options].some(o => o.value == labelText)) {
+                let opt = document.createElement('option');
+                opt.value = opt.text = labelText;
+                selects[i].add(opt);
+            }
+            selects[i].value = labelText;
+            setNumericDisplay(inputs[i], valueNum);
+        }
+    });
+
+    calc(); // Tính lại tổng chỉ số
+    autoSave(); // Tự động lưu vào trình duyệt
+}
 
 
 function autoFillUnique(boxIndex, itemName) {
@@ -622,37 +998,127 @@ function autoFillUnique(boxIndex, itemName) {
     calc();
     autoSave();
 }
-  function calc() {
+// ==================== HÀM CALC() MỚI - KIỂM TRA TRÙNG TOÀN CỤC ====================
+function calc() {
     let totals = {};
-    document.querySelectorAll('.box').forEach(b => {
-        let ts = b.querySelectorAll('.t'), 
-            vs = b.querySelectorAll('.v');
-            
-        ts.forEach((t, i) => {
-            // Chỉ tính nếu đã chọn thuộc tính (khác "---") 
-            // và ô nhập số có giá trị (không để trống)
-            if (t.value !== "---") {
-                // Lấy giá trị: Nếu trống thì coi là 0 để không bị lỗi NaN
-                let valueNum = parseFloat(vs[i].value) || 0;
-                
-                // Chỉ cộng vào bảng tổng nếu con số đó lớn hơn 0 
-                // (Để bảng tổng kết không hiện một đống dòng +0.0%)
-                if (valueNum > 0) {
-                    totals[t.value] = (totals[t.value] || 0) + valueNum;
+    let stoneRecords = [];        // Lưu tất cả đá bổ trợ từ mọi slot
+    let duplicateWarnings = [];
+
+    document.querySelectorAll('.box').forEach((box, slotIndex) => {
+        const selects = box.querySelectorAll('.t');
+        const inputs = box.querySelectorAll('.v');
+
+        selects.forEach((select, i) => {
+            const attrName = select.value.trim();
+            const value = parseFloat(inputs[i].value) || 0;
+
+            if (attrName !== "---" && attrName !== "" && value > 0) {
+
+                // Kiểm tra xem dòng này có phải "Đá bổ trợ" không
+                const parentDiv = select.closest('.flex.gap-2');
+                const labelDiv = parentDiv ? parentDiv.previousElementSibling : null;
+                const isStoneRow = labelDiv && 
+                                  (labelDiv.textContent.includes('Đá bổ trợ') || 
+                                   labelDiv.textContent.includes('Đá bổ trợ Kỹ năng'));
+
+                if (isStoneRow) {
+                    stoneRecords.push({
+                        slotIndex: slotIndex,
+                        rowIndex: i,
+                        name: attrName,
+                        value: value
+                    });
                 }
+
+                // Cộng tạm vào tổng
+                totals[attrName] = (totals[attrName] || 0) + value;
             }
         });
     });
 
-    // Hiển thị kết quả ra bảng tổng kết (Res)
-    let html = Object.entries(totals).map(([k, v]) => 
-        `<div class="bg-black/40 p-2 rounded-lg border border-zinc-800/50 text-[9px]">
-            <div class="text-zinc-300 uppercase">${k}</div>
-            <b class="text-sky-400 font-extrabold text-[11px]">+ ${v.toFixed(1)}%</b>
-         </div>`
-    ).join('') || '<p class="col-span-full text-center text-zinc-600 italic">Chưa có chỉ số...</p>';
-    
+    // === XỬ LÝ TRÙNG ĐÁ BỔ TRỢ TOÀN CỤC ===
+    const stoneMap = {};
+    stoneRecords.forEach(stone => {
+        if (!stoneMap[stone.name]) stoneMap[stone.name] = [];
+        stoneMap[stone.name].push(stone);
+    });
+
+    Object.keys(stoneMap).forEach(stoneName => {
+        const list = stoneMap[stoneName];
+        if (list.length >= 2) {
+            // Có trùng giữa các trang bị khác nhau
+            duplicateWarnings.push({
+                stoneName: stoneName,
+                records: list
+            });
+
+            // Chỉ giữ giá trị cao nhất
+            const maxVal = Math.max(...list.map(s => s.value));
+            const totalAdded = list.reduce((sum, s) => sum + s.value, 0);
+            const excess = totalAdded - maxVal;
+
+            if (excess > 0) {
+                totals[stoneName] = maxVal;   // Ghi đè = giá trị cao nhất
+            }
+        }
+    });
+
+    // Tô đỏ các dòng bị trùng
+    highlightDuplicateStones(duplicateWarnings);
+
+    // Hiển thị kết quả
+    const noPercentList = [
+        ...daBoTroVuKhi["Đá bổ trợ kỹ năng"],
+        "Sát thương kỹ năng", "Sát thương chí mạng", "Tỉ lệ chí mạng", 
+        "Tốc độ đánh", "Sát thương thêm", "Kháng hiệu ứng", 
+        "Hồi phục máu mỗi giây", "Hút máu", "Giai đoạn", "Cấp độ"
+    ];
+
+    let html = Object.entries(totals)
+        .filter(([k, v]) => v > 0)
+        .map(([k, v]) => {
+            const isNoPercent = noPercentList.includes(k);
+            const suffix = isNoPercent ? "" : "%";
+            const displayVal = isNoPercent ? Math.floor(v) : v.toFixed(1);
+
+            return `<div class="bg-black/40 p-2 rounded-lg border border-zinc-800/50 text-[9px]">
+                <div class="text-zinc-300 uppercase">${k}</div>
+                <b class="text-sky-400 font-extrabold text-[11px]">+ ${displayVal}${suffix}</b>
+            </div>`;
+        }).join('');
+
+    if (html === '') {
+        html = '<p class="col-span-full text-center text-zinc-600 italic">Chưa có chỉ số...</p>';
+    }
+
     document.getElementById('res').innerHTML = html;
+}
+
+    function highlightDuplicateStones(warnings) {
+    // Reset hết màu đỏ trước
+    document.querySelectorAll('.box select.t, .box input.v').forEach(el => {
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+    });
+
+    warnings.forEach(warn => {
+        warn.records.forEach(record => {
+            const box = document.querySelectorAll('.box')[record.slotIndex];
+            if (!box) return;
+
+            const select = box.querySelectorAll('select.t')[record.rowIndex];
+            const input = box.querySelectorAll('input.v')[record.rowIndex];
+
+            if (select) {
+                select.style.borderColor = '#ef4444';
+                select.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.7)';
+            }
+            if (input) {
+                input.style.borderColor = '#ef4444';
+                input.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.7)';
+            }
+        });
+    });
 }
 
     function v(type) { 
