@@ -20,12 +20,12 @@
             font-size: 10px; 
         }
         .btn-p { 
-            background: linear-gradient(135deg, #ec4899, #be185d); 
-            padding: 6px 12px; 
-            border-radius: 0.7rem; 
-            font-weight: 800; 
-            font-size: 9px; 
-        }
+    background: linear-gradient(135deg, #0ea5e9, #0284c7); /* Xanh sky */
+    padding: 6px 12px; 
+    border-radius: 0.7rem; 
+    font-weight: 800; 
+    font-size: 9px; 
+}
         .tab-btn { 
             color: #71717a; 
             border-bottom: 2px solid transparent; 
@@ -34,21 +34,52 @@
             cursor: pointer; 
         }
         .tab-btn.active { 
-            color: #ec4899; 
-            border-color: #ec4899; 
+            color: #0ea5e9; 
+            border-color: #0ea5e9; 
         }
-        .vk-select { 
-            background: #311b92; 
-            border: 1px solid #673ab7; 
-            font-weight: bold; 
-            color: #e1bee7; 
-        }
-        select { position: relative; z-index: 30 !important; }
-        select:focus { z-index: 50 !important; box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.6); }
-        .box { position: relative; z-index: 10; }
-        optgroup { color: #ec4899; font-weight: bold; }
-.box-content.hidden-node {
-    display: none;
+       .vk-select { 
+    background: #1f2937;
+    border: 2px solid #8b5cf6;
+    font-weight: 700; 
+    color: #ede9fe;
+}
+
+.vk-select:hover {
+    background: #334155;
+    border-color: #a78bfa;
+}
+
+.vk-select:focus {
+    border-color: #c4b5fd;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.4);
+}
+        
+        /* ĐOẠN CSS CHUẨN CHO SELECT - DÁN ĐÈ VÀO DÒNG 30 */
+select {
+    position: relative !important;
+    z-index: 50 !important; /* Đảm bảo menu đổ xuống luôn nằm trên cùng */
+    background-color: #111113 !important;
+    border: 1px solid #27272a !important;
+    color: #94a3b8 !important;
+    padding: 6px 12px !important;
+    border-radius: 10px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Khi đang chọn (Focus) thì đẩy Z-index lên cao nhất */
+select:focus {
+    z-index: 100 !important;
+    outline: none;
+    border-color: #ffffff33 !important;
+}
+
+/* Fix lỗi chữ trắng khi bấm mở menu */
+select option {
+    background-color: #111113 !important;
+    color: #ffffff !important;
 }
 .btn-hide {
     cursor: pointer;
@@ -57,6 +88,8 @@
 .btn-hide.active {
     transform: rotate(-90deg);
 }
+
+
 /* Thanh cuộn siêu mỏng cho danh sách hồ sơ */
 .custom-scroll::-webkit-scrollbar {
     width: 3px;
@@ -69,7 +102,7 @@
     border-radius: 10px;
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-    background: #ec4899;
+    background: #0ea5e9;
 }
 
 /* Style cho nút con mắt */
@@ -83,11 +116,11 @@
 }
 
 .btn-eye:hover {
-    color: #ec4899;
+    color: #0ea5e9;
 }
 
 .btn-eye.is-hidden {
-    color: #ec4899; /* Màu hồng khi đang ẩn */
+    color: #0ea5e9; /* Màu hồng khi đang ẩn */
     filter: drop-shadow(0 0 2px rgba(236, 72, 153, 0.5));
 }
 
@@ -96,19 +129,128 @@
     display: none;
 }
 
+/* Thông báo Toast xịn sò */
+.toast {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(14, 165, 233, 0.95); /* Màu xanh Sky */
+    color: white;
+    padding: 10px 24px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 800;
+    z-index: 10000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    animation: fadeInOut 1.5s forwards;
+    pointer-events: none; /* Để không bị vướng khi bấm chuột xuyên qua */
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; top: 10px; }
+    15% { opacity: 1; top: 25px; }
+    85% { opacity: 1; top: 25px; }
+    100% { opacity: 0; top: 10px; }
+}
+/* Nếu ô đang được chọn, viền sẽ đậm hơn và chữ sáng hơn */
+select:active, select:focus-within {
+    border-color: #fff !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hiệu ứng hào quang cho toàn bộ bảng chọn */
+select:hover {
+    filter: brightness(1.2);
+    transform: scale(1.01);
+}
+
+/* Style cho nhóm trong kho */
+.group-header {
+    user-select: none;
+}
+
+.kho-group-content {
+    display: grid;
+    transition: all 0.3s ease;
+}
+
+.group-arrow {
+    transition: transform 0.3s ease;
+}
+
+/* === FINAL STRONG FIX - THANH CUỘN LUÔN ĐỀU + ÍT BỊ CẮT NHẤT === */
+
+select {
+    position: relative !important;
+    z-index: 50 !important;
+    max-height: 450px !important;           /* Tăng cao hơn để menu rộng rãi */
+    overflow-y: scroll !important;          /* Buộc thanh cuộn LUÔN hiện */
+    overflow-x: hidden !important;
+    background-color: #111113 !important;
+    border: 1px solid #27272a !important;
+    color: #94a3b8 !important;
+    padding: 6px 12px !important;
+    border-radius: 10px !important;
+    font-size: 10px !important;
+}
+
+select:focus {
+    z-index: 99999 !important;
+    border-color: #0ea5e9 !important;
+    box-shadow: 0 0 0 5px rgba(14, 165, 233, 0.7) !important;
+}
+
+/* Thanh cuộn đẹp, dễ kéo, luôn hiện */
+select::-webkit-scrollbar {
+    width: 9px !important;
+    display: block !important;
+}
+select::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 10px;
+}
+select::-webkit-scrollbar-thumb {
+    background: #52525b;
+    border-radius: 10px;
+}
+select::-webkit-scrollbar-thumb:hover {
+    background: #0ea5e9;
+}
+
+/* Option */
+select option {
+    background-color: #111113 !important;
+    color: #ffffff !important;
+    padding: 10px 12px !important;
+}
+
+/* Buộc tất cả cha không cắt menu */
+.card, .box, .box-content, #eqs, #eqs > div {
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.box:focus-within,
+.box:hover {
+    z-index: 300 !important;
+}
+
     </style>
 </head>
 <body class="p-3">
     <div class="mb-6 card border-zinc-800 bg-zinc-900/30">
     <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center mb-4">
         <div class="w-full lg:w-64">
-            <div class="text-pink-500/80 italic text-[9px] mb-1 ml-1 font-medium">Hồ sơ thợ săn</div>
-            <input type="text" id="name" placeholder="Tên..." 
-                   class="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl focus:border-pink-500/50 transition-all text-[10px] h-9 w-full">
+            <div class="text-sky-400 text-[10px] mb-1 ml-1 font-bold uppercase tracking-wider">Hồ sơ thợ săn</div>
+           <input type="text" id="name" placeholder="Nhập tên thợ săn..." 
+       class="px-4 py-2 bg-zinc-950 border-2 border-zinc-800 rounded-xl 
+              focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 
+              transition-all text-[11px] h-10 w-full text-sky-100 font-bold shadow-inner">
         </div>
 
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 w-full flex-1">
-            <button onclick="luuProfile()" class="bg-pink-600 hover:bg-pink-500 text-white text-[9px] font-bold h-9 rounded-xl">💾 LƯU</button>
+            <button onclick="luuProfile()" class="bg-sky-600 hover:bg-sky-500 text-white text-[9px] font-bold h-9 rounded-xl">💾 LƯU</button>
             <button onclick="resetAllFields()" class="bg-zinc-700 hover:bg-zinc-600 text-white text-[9px] font-bold h-9 rounded-xl">🧹 RESET</button>
             <button onclick="showHuongDan()" class="bg-yellow-600 hover:bg-yellow-500 text-white text-[9px] font-bold h-9 rounded-xl">📖 HD</button>
             <button onclick="showKho()" class="bg-orange-600 hover:bg-orange-500 text-white text-[9px] font-bold h-9 rounded-xl">📦 KHO</button>
@@ -119,7 +261,7 @@
     
     <div class="pt-3 border-t border-zinc-800/50">
         <div class="flex justify-between items-center mb-2 ml-1">
-            <div class="text-pink-500/80 italic text-[9px]">Hồ sơ đã lưu (Nhấn chọn, giữ xóa):</div>
+            <div class="text-sky-400 text-[9px]">Hồ sơ đã lưu (Nhấn chọn, giữ 1s để xóa):</div>
             <div id="profileCount" class="text-[9px] text-zinc-500 font-bold">0/20</div>
         </div>
         <div id="listProfile" class="flex flex-nowrap gap-2 overflow-x-auto pb-2 pr-1 custom-scroll min-h-[40px]"></div>
@@ -128,8 +270,8 @@
 
       <div id="eqs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
 
-    <div class="card border-pink-500/20 bg-zinc-900/50">
-        <b class="text-pink-500 italic text-sm uppercase block mb-4">Tổng Chỉ Số</b>
+    <div class="card border-sky-500/20 bg-zinc-900/50">
+        <b class="text-zinc-100 text-sm uppercase block mb-4">Thông Tin Chi Tiết</b>
         <div id="res" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
     </div>
 
@@ -137,35 +279,88 @@
     <div id="khoModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
         <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex justify-between items-center px-6 py-4 border-b border-zinc-700">
-                <h2 class="text-xl font-bold text-pink-500">📦 KHO LƯU TRỮ ĐỒ</h2>
+                <h2 class="text-xl font-bold text-sky-400">📦 KHO LƯU TRỮ ĐỒ</h2>
                 <button onclick="hideKho()" class="text-3xl leading-none text-zinc-400 hover:text-white">×</button>
             </div>
             <div id="khoContent" class="flex-1 p-6 overflow-y-auto text-sm"></div>
             <div class="px-6 py-4 border-t border-zinc-700 text-center text-xs text-zinc-500">
-                Tổng số món đồ trong kho: <span id="totalItems" class="font-bold text-pink-400">0</span>
+                Tổng số món đồ trong kho: <span id="totalItems" class="font-bold text-sky-400">0</span>
             </div>
         </div>
     </div>
 
     <!-- MODAL CLOUD ĐÁM MÂY (THÊM TỪ BUILD1.HTML - ĐÃ SỬA ĐỂ DÙNG CLASS "hidden" cho đồng bộ) -->
-    <div id="cloudModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-md w-full p-8 text-center">
-            <h2 class="text-2xl font-bold text-pink-500 mb-6">☁️ MÃ LƯU ĐÁM MÂY</h2>
-            <div id="ma_val" class="text-4xl sm:text-6xl font-mono tracking-[4px] sm:tracking-[12px] bg-black/70 py-6 sm:py-8 rounded-3xl text-pink-400 font-black mb-6 break-all">
-    ABCD123
-</div>
-            <p class="text-xs text-zinc-400 mb-8">Gửi mã này cho bạn bè để họ nạp build ngay!</p>
-            <button onclick="hideCloudModal()" class="btn-p w-full py-3 text-sm">ĐÓNG</button>
+   <div id="cloudModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm hidden items-center justify-center z-[10000] p-4">
+    <div class="card w-full max-w-sm border-sky-900/50 bg-zinc-950 p-6 shadow-2xl">
+        
+        <div class="text-center mb-6">
+            <div class="inline-block p-3 bg-sky-500/10 rounded-full mb-2">
+                <span class="text-2xl">☁️</span>
+            </div>
+            <h3 class="text-sky-400 font-black uppercase tracking-tighter text-lg">Hệ Thống Đám Mây</h3>
+            <p class="text-[10px] text-zinc-500">Lưu trữ và chia sẻ build đồ của thợ săn</p>
         </div>
+
+        <div class="relative mb-6">
+            <div id="ma_val" class="text-center text-3xl font-mono tracking-[8px] py-5 bg-black border-2 border-sky-900/30 rounded-2xl text-sky-400 font-black shadow-inner">----</div>
+            <div class="absolute -top-2 left-4 px-2 bg-zinc-950 text-[9px] text-sky-500 font-bold uppercase">Mã của ông</div>
+        </div>
+
+        <div class="space-y-3">
+            <button onclick="copyMa()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white py-3 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-all">
+                <span>📋</span> SAO CHÉP MÃ HIỆN TẠI
+            </button>
+
+            <div class="relative py-2">
+                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-zinc-800"></div></div>
+                <div class="relative flex justify-center text-[9px] uppercase"><span class="bg-zinc-950 px-2 text-zinc-600 font-bold">Hoặc sao lưu tất cả</span></div>
+            </div>
+
+          <button id="btnBackup" 
+        onclick="saveAllToCloud()" 
+        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white py-3 rounded-xl font-bold text-[11px] shadow-lg shadow-blue-900/20 transition-all">
+    🚀 SAO LƯU TOÀN BỘ BUILD (BACKUP)
+</button>
+            </button>
+        </div>
+
+        <div class="mt-6 p-3 bg-blue-500/5 rounded-lg border border-blue-500/10">
+            <p class="text-[9px] text-zinc-400 leading-relaxed">
+                💡 <b>Mẹo:</b> Dùng mã <b>BK...</b> khi ông muốn chuyển toàn bộ dữ liệu sang máy khác hoặc trình duyệt khác.
+            </p>
+        </div>
+
+        <button onclick="document.getElementById('cloudModal').classList.add('hidden')" class="w-full mt-4 text-zinc-600 hover:text-zinc-400 text-[10px] font-bold uppercase tracking-widest">Đóng</button>
     </div>
+</div>
 
    <script>
     const DB = 'EHT_PROFILES_V3';
     const INVENTORY_DB = 'EHT_V3_INVENTORY';
-    const GOOGLE_API = 'https://script.google.com/macros/s/AKfycbyEWn53VqoRXk7tl9CEQQgnvWBhv-VeI-sU65U4b2N48Fbp1gIj3ew5LaL8t11TvyYvjg/exec';
+    const GOOGLE_API = 'https://script.google.com/macros/s/AKfycbz4nU6Aql4vRkCe6p9ETsVhRQLz5iMVSZpoN7xzGOeD7aASQkN6WCuH140NbhaVihli-w/exec';
 
    // 1. Gom tất cả thuộc tính vào 1 danh sách duy nhất
-const attrs = ["---", "Tăng ATK", "Chí Mạng", "Thiệt hại đòn Chí mạng", "Sát thương lên Boss", "Tăng DEF", "Tăng HP", "Tránh Né", "Kháng hiệu ứng"];
+const attrs = [
+    "---",
+      // === Nhóm 1 ===
+    "HP Tăng",
+    "Tránh Né Tăng",
+    "Tổng DEF Tăng",
+    "Giảm sát thương phải chịu",
+    "Tổng ATK Tăng",
+    "Tốc độ tấn công Tăng",
+    
+    "Xác suất chí mạng Tăng",
+    "Thiệt hại do đòn chí mạng Tăng",
+    "Sát thương lên Quái Nhân Tăng",
+    "Sát thương lên Boss Tăng",
+    "Sát thương lên Quỷ Tăng",
+    "Sát thương lên Xác Sống Tăng",
+    "Sát thương lên Thú Tăng",
+    "Hút máu",
+    "Tốc độ di chuyển Tăng",
+    
+];
 
 // 2. Danh sách 8 món trang bị
 const slots = ["Vũ khí", "Áo Giáp", "Găng tay", "Giày", "Đai", "Nhẫn", "Dây chuyền", "Mũ"];
@@ -228,6 +423,18 @@ let inventory = {};
         "Mũ": ["---", "Đá Chí Mạng", "Đá Kháng"]
     };
 
+let curV = 'all';
+
+// === HELPER MỚI: hiển thị khoảng trắng thay vì 0 ===
+function setNumericDisplay(inputEl, value) {
+    const num = parseFloat(value);
+    if (isNaN(num) || num === 0) {
+        inputEl.value = '';
+    } else {
+        inputEl.value = num;
+    }
+}
+
     function loadInventory() {
         inventory = JSON.parse(localStorage.getItem(INVENTORY_DB) || '{}');
         slots.forEach(s => { if (!Array.isArray(inventory[s])) inventory[s] = []; });
@@ -246,7 +453,7 @@ let inventory = {};
             <div class="flex justify-between items-center mb-3">
                 <div class="flex items-center gap-2">
                     <span onclick="toggleEye(this)" class="btn-eye" style="cursor:pointer; font-size:14px;">👁️</span>
-                    <b class="text-pink-400 uppercase italic text-[9px] tracking-wider">${s}</b>
+                    <b class="text-sky-400 uppercase text-[9px] tracking-wider">${s}</b>
                 </div>`;
         
         if (s === "Vũ khí") {
@@ -277,32 +484,32 @@ let inventory = {};
                 <button onclick="saveToKho(${i})" class="btn-p text-[8px] px-3 py-1">LƯU KHO</button>
             </div>
 
-            <div class="text-pink-500/80 italic text-[9px] mb-1 ml-1">Thuộc tính</div>`;
+            <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Thuộc tính</div>`;
 
             for (let row = 0; row < 5; row++) {
                 h += `<div class="flex gap-2 mb-2">
                     <select class="t flex-[2.5]">${listChung.map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
-                    <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="0">
+                    <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="">
                 </div>`;
             }
 
             let daOptions = (typeof daBoTroOptions !== 'undefined' && daBoTroOptions[s]) ? daBoTroOptions[s] : listChung;
             h += `<div class="mb-3">
-                <div class="text-pink-500/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ</div>
+                <div class="text-sky-400/80 italic text-[9px] mb-1 ml-1">Đá bổ trợ</div>
                 <div class="flex gap-2">
                     <select class="t flex-[2.5]">${daOptions.map(o => `<option value='${o}'>${o}</option>`).join('')}</select>
-                    <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="0">
+                    <input type="number" class="v flex-[1] text-center font-bold px-1 bg-zinc-900 border border-zinc-800 rounded h-7" value="">
                 </div>
             </div>
 
             <div class="mt-4 pt-2 border-t border-zinc-800/50 flex items-center gap-4 text-[9px]">
-                <span class="text-pink-500/80 italic ml-1">Có thể Kế thừa:</span>
+                <span class="text-sky-400/80 italic ml-1">Có thể Kế thừa:</span>
                 <label class="flex items-center gap-1.5 cursor-pointer">
-                    <input type="checkbox" class="chatLuong accent-pink-500 w-3.5 h-3.5">
+                    <input type="checkbox" class="chatLuong accent-sky-500 w-3.5 h-3.5">
                     <span class="text-zinc-400">Chất lượng</span>
                 </label>
                 <label class="flex items-center gap-1.5 cursor-pointer">
-                    <input type="checkbox" class="thuocTinh accent-pink-500 w-3.5 h-3.5">
+                    <input type="checkbox" class="thuocTinh accent-sky-500 w-3.5 h-3.5">
                     <span class="text-zinc-400">Thuộc tính</span>
                 </label>
             </div>
@@ -315,6 +522,23 @@ let inventory = {};
     document.querySelectorAll('#eqs select, #eqs input').forEach(el => {
         el.oninput = () => { calc(); autoSave(); };
     });
+
+// Tự động xóa số 0 khi chọn "---"
+document.querySelectorAll('.box').forEach(box => {
+    const selects = box.querySelectorAll('.t');
+    const inputs = box.querySelectorAll('.v');
+    
+    selects.forEach((sel, i) => {
+        sel.addEventListener('change', () => {
+            if (sel.value === '---') {
+                inputs[i].value = '';
+            } else {
+                // Nếu gõ 0 thủ công thì cũng chuyển thành khoảng trắng
+                if (inputs[i].value === '0') inputs[i].value = '';
+            }
+        });
+    });
+});
     calc();
 }
 
@@ -339,50 +563,33 @@ function autoFillWeapon(jsonVal) {
     const info = JSON.parse(jsonVal);
     const stats = classWeapons[info.cls][info.mode][info.name];
     let b = document.querySelectorAll('.box')[0];
-    let selects = b.querySelectorAll('.t'), inputs = b.querySelectorAll('.v');
+    let selects = b.querySelectorAll('.t');
+    let inputs = b.querySelectorAll('.v');
 
+    // Reset tất cả về "---" và khoảng trắng (không còn 0 nữa)
     selects.forEach(s => s.value = "---");
-    inputs.forEach(i => i.value = 0);
+    inputs.forEach(i => setNumericDisplay(i, 0));
 
+    // Điền thuộc tính đặc biệt của vũ khí (vẫn để số là khoảng trắng)
     stats.forEach((statText, i) => {
         if (i < selects.length) {
             let select = selects[i];
             if (![...select.options].some(o => o.value == statText)) {
-                let opt = document.createElement('option'); opt.value = opt.text = statText;
+                let opt = document.createElement('option');
+                opt.value = opt.text = statText;
                 select.add(opt);
             }
             select.value = statText;
-            inputs[i].value = 0;
+            setNumericDisplay(inputs[i], 0);   // ← Quan trọng: để khoảng trắng
         }
     });
-    calc(); autoSave();
+
+    calc();
+    autoSave();
 }
 
-function autoFillUnique(boxIndex, itemName) {
-    if (!itemName) return;
-    const slotName = slots[boxIndex];
-    const itemStats = uniqueEquip[slotName][itemName];
-    let b = document.querySelectorAll('.box')[boxIndex];
-    let selects = b.querySelectorAll('.t'), inputs = b.querySelectorAll('.v');
 
-    selects.forEach(s => s.value = "---");
-    inputs.forEach(i => i.value = 0);
 
-    itemStats.forEach((stat, i) => {
-        if (i < selects.length) {
-            let select = selects[i];
-            if (![...select.options].some(o => o.value == stat.t)) {
-                let opt = document.createElement('option'); opt.value = opt.text = stat.t;
-                select.add(opt);
-            }
-            select.value = stat.t;
-            inputs[i].value = stat.v;
-        }
-    });
-    calc(); autoSave();
-}
-
-// 3. Hàm bổ trợ cho các món đồ Độc Nhất khác (Áo, Găng, Nhẫn...)
 function autoFillUnique(boxIndex, itemName) {
     if (!itemName) return;
     
@@ -394,44 +601,59 @@ function autoFillUnique(boxIndex, itemName) {
     let selects = b.querySelectorAll('.t');
     let inputs = b.querySelectorAll('.v');
 
-    // Reset 5 dòng về mặc định trước
+    // === RESET VỀ KHOẢNG TRẮNG (quan trọng nhất) ===
     selects.forEach(s => s.value = "---");
-    inputs.forEach(i => i.value = 0);
+    inputs.forEach(i => setNumericDisplay(i, 0));
 
-    // Điền dữ liệu mới
+    // Điền dữ liệu của đồ độc nhất
     itemStats.forEach((stat, i) => {
         if (i < selects.length) {
             let select = selects[i];
-            // Kiểm tra nếu thuộc tính chưa có trong danh sách chọn thì thêm vào
             if (![...select.options].some(o => o.value == stat.t)) {
                 let opt = document.createElement('option');
                 opt.value = opt.text = stat.t;
                 select.add(opt);
             }
             select.value = stat.t;
-            inputs[i].value = stat.v;
+            setNumericDisplay(inputs[i], stat.v);   // giữ số thật, không ép 0
         }
     });
 
-    calc(); // Tính lại tổng chỉ số ngay lập tức
+    calc();
+    autoSave();
 }
-    function calc() {
-        let totals = {};
-        document.querySelectorAll('.box').forEach(b => {
-            let ts = b.querySelectorAll('.t'), vs = b.querySelectorAll('.v');
-            ts.forEach((t, i) => {
-                if (t.value !== "---") {
-                    totals[t.value] = (totals[t.value] || 0) + (parseFloat(vs[i].value) || 0);
+  function calc() {
+    let totals = {};
+    document.querySelectorAll('.box').forEach(b => {
+        let ts = b.querySelectorAll('.t'), 
+            vs = b.querySelectorAll('.v');
+            
+        ts.forEach((t, i) => {
+            // Chỉ tính nếu đã chọn thuộc tính (khác "---") 
+            // và ô nhập số có giá trị (không để trống)
+            if (t.value !== "---") {
+                // Lấy giá trị: Nếu trống thì coi là 0 để không bị lỗi NaN
+                let valueNum = parseFloat(vs[i].value) || 0;
+                
+                // Chỉ cộng vào bảng tổng nếu con số đó lớn hơn 0 
+                // (Để bảng tổng kết không hiện một đống dòng +0.0%)
+                if (valueNum > 0) {
+                    totals[t.value] = (totals[t.value] || 0) + valueNum;
                 }
-            });
+            }
         });
-        let html = Object.entries(totals).map(([k,v]) => 
-            `<div class="bg-black/40 p-2 rounded-lg border border-zinc-800/50 text-[9px]">
-                <div>${k}</div><b class="text-pink-500 font-extrabold text-[11px]">${v.toFixed(1)}%</b>
-             </div>`
-        ).join('') || '<p class="col-span-full text-center text-zinc-600 italic">Trống...</p>';
-        document.getElementById('res').innerHTML = html;
-    }
+    });
+
+    // Hiển thị kết quả ra bảng tổng kết (Res)
+    let html = Object.entries(totals).map(([k, v]) => 
+        `<div class="bg-black/40 p-2 rounded-lg border border-zinc-800/50 text-[9px]">
+            <div class="text-zinc-300 uppercase">${k}</div>
+            <b class="text-sky-400 font-extrabold text-[11px]">+ ${v.toFixed(1)}%</b>
+         </div>`
+    ).join('') || '<p class="col-span-full text-center text-zinc-600 italic">Chưa có chỉ số...</p>';
+    
+    document.getElementById('res').innerHTML = html;
+}
 
     function v(type) { 
     // Bước 1: Lưu lại dữ liệu hiện tại trước khi đổi tab
@@ -454,63 +676,120 @@ function autoFillUnique(boxIndex, itemName) {
     calc(); 
 }
 
-    async function on() {
-        let n = document.getElementById('name').value.trim();
-        let db = JSON.parse(localStorage.getItem(DB) || '{}');
-        if (!n || !db[n]) return alert('Lưu thợ săn vào máy trước đã!');
-        const chu = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", so = "0123456789";
-        let ma = "";
-        for (let i = 0; i < 4; i++) ma += chu.charAt(Math.floor(Math.random() * chu.length));
-        for (let i = 0; i < 3; i++) ma += so.charAt(Math.floor(Math.random() * so.length));
-        document.getElementById('ma_val').innerText = ma;
-        document.getElementById('cloudModal').classList.remove('hidden');
+   
+
+    // 1. Mở bảng nhập
+function nhap() {
+    const modal = document.getElementById('importModal');
+    const input = document.getElementById('cloudInput');
+    const btnXacNhan = document.querySelector("button[onclick='executeNhap()']");
+
+    input.value = ""; 
+    
+    // --- XÓA SẠCH DẤU VẾT MÀU ĐỎ KHI MỞ LẠI BẢNG ---
+    input.style.removeProperty('border-color');
+    input.style.removeProperty('color');
+    input.classList.remove('shadow-[0_0_10px_rgba(239,68,68,0.5)]');
+
+    btnXacNhan.innerText = "XÁC NHẬN";
+    btnXacNhan.style.opacity = "1";
+    btnXacNhan.disabled = false;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    input.focus();
+}
+
+// 2. Đóng bảng
+function closeImport() {
+    const modal = document.getElementById('importModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+// 3. Xử lý nạp mã (Logic gốc của ông)
+async function executeNhap() {
+    const input = document.getElementById('cloudInput');
+    const btnXacNhan = document.querySelector("button[onclick='executeNhap()']");
+    let ma = input.value.toUpperCase().trim();
+
+    if (!ma) {
+        showToast("⚠️ CHƯA NHẬP MÃ MÀ NÍ!");
+        return;
+    }
+
+    const laMaThuong = /^[A-Z]{5}[0-9]{3}$/.test(ma); 
+    const laMaBackup = /^BK[A-Z]{3}[0-9]{3}$/.test(ma);
+
+    if (!laMaThuong && !laMaBackup) {
+        showToast("❌ MÃ PHẢI ĐỦ 8 KÝ TỰ (VD: ABCDE123)!");
+        return;
+    }
+
+    btnXacNhan.innerText = "⏳ ĐANG QUÉT...";
+    btnXacNhan.disabled = true;
+
+    try {
+        const response = await fetch(`${GOOGLE_API}?ma=${ma}`);
+        const text = await response.text(); 
+        
+        // 1. Chặn lỗi nếu Google Script báo không tìm thấy
+        if (text.includes("Not Found") || text.includes("Missing ma")) {
+            showToast("❌ MÃ KHÔNG TỒN TẠI TRÊN ĐÁM MÂY!");
+            btnXacNhan.innerText = "XÁC NHẬN";
+            btnXacNhan.disabled = false;
+            return;
+        }
+
+        let data;
         try {
-            fetch(GOOGLE_API, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ ma: ma, raw: JSON.stringify({ n: n, d: db[n] }) })
-            });
-        } catch (e) { console.log("Lưu ngầm lỗi"); }
-    }
+            data = JSON.parse(text);
+        } catch(e) {
+            showToast("❌ DỮ LIỆU TỪ MÂY BỊ LỖI!");
+            btnXacNhan.innerText = "XÁC NHẬN";
+            btnXacNhan.disabled = false;
+            return;
+        }
 
-    async function nhap() {
-        let ma = prompt('Nhập mã (VD: ABCD123):');
-        if (!ma) return;
-        ma = ma.toUpperCase().trim();
-        if (!/^[A-Z]{4}[0-9]{3}$/.test(ma)) return alert("Mã phải có 4 chữ và 3 số!");
-        try {
-            const response = await fetch(GOOGLE_API + "?ma=" + ma);
-            const txt = await response.text();
-            if (txt === "Not Found") return alert("Không tìm thấy mã này!");
-            const res = JSON.parse(txt);
-            let db = JSON.parse(localStorage.getItem(DB) || '{}');
-            db[res.n] = res.d;
-            localStorage.setItem(DB, JSON.stringify(db));
-            renderListProfile(); 
-            loadProfile(res.n);
-            alert("Đã tải xong: " + res.n);
-        } catch (e) { alert('Lỗi kết nối hoặc mã sai.'); }
-    }
+        let rawData;
+        // 2. Tự động nhận diện Script mới (có status: success) hoặc Script cũ (dữ liệu trực tiếp)
+        if (data.status === "success") {
+            rawData = JSON.parse(data.raw);
+        } else if (data.n || data.isBackup) {
+            rawData = data;
+        }
 
-    function hideCloudModal() { document.getElementById('cloudModal').classList.add('hidden'); }
-
-    function luuProfile() {
-        let n = document.getElementById('name').value.trim();
-        if (!n) return alert("Nhập tên đã ông ơi!");
-        let data = Array.from(document.querySelectorAll('.box')).map(b => ({
-            attr: Array.from(b.querySelectorAll('.t')).map((t, i) => ({
-                t: t.value,
-                v: b.querySelectorAll('.v')[i].value
-            })),
-            cl: b.querySelector('.chatLuong')?.checked || false,
-            tt: b.querySelector('.thuocTinh')?.checked || false
-        }));
-        let db = JSON.parse(localStorage.getItem(DB) || '{}');
-        db[n] = data;
-        localStorage.setItem(DB, JSON.stringify(db));
-        renderListProfile();
-        alert("✅ Đã tạo hồ sơ: " + n);
+        // 3. Tiến hành nạp dữ liệu
+        if (rawData) {
+            if (laMaBackup || rawData.isBackup) {
+                if (confirm("⚠️ ĐÂY LÀ MÃ SAO LƯU TỔNG! Chốt ghi đè toàn bộ hồ sơ hiện có không ní?")) {
+                    localStorage.setItem(DB, JSON.stringify(rawData.allData));
+                    renderListProfile();
+                    showToast("✅ ĐÃ KHÔI PHỤC TOÀN BỘ!");
+                    closeImport(); // Đã sửa lỗi offNhap
+                }
+            } else {
+                let db = JSON.parse(localStorage.getItem(DB) || '{}');
+                db[rawData.n] = rawData.d;
+                localStorage.setItem(DB, JSON.stringify(db));
+                renderListProfile();
+                showToast(`✅ ĐÃ NẠP BUILD: ${rawData.n}`);
+                closeImport(); // Đã sửa lỗi offNhap
+            }
+            input.value = "";
+        } else {
+            showToast("❌ MÃ KHÔNG TỒN TẠI TRÊN ĐÁM MÂY!");
+        }
+    } catch (e) {
+        showToast("❌ LỖI KẾT NỐI! KIỂM TRA MẠNG HOẶC LINK API");
+        console.error("Lỗi fetch:", e);
+    } finally {
+        btnXacNhan.innerText = "XÁC NHẬN";
+        btnXacNhan.disabled = false;
     }
+}
+
+  
 
 function autoSave() {
     let n = document.getElementById('name').value.trim();
@@ -519,7 +798,7 @@ function autoSave() {
     let data = Array.from(document.querySelectorAll('.box')).map(b => ({
         attr: Array.from(b.querySelectorAll('.t')).map((t, i) => ({
             t: t.value,
-            v: b.querySelectorAll('.v')[i].value
+            v: parseFloat(b.querySelectorAll('.v')[i].value) || 0
         })),
         cl: b.querySelector('.chatLuong')?.checked || false,
         tt: b.querySelector('.thuocTinh')?.checked || false
@@ -533,26 +812,11 @@ function autoSave() {
     renderListProfile();
 }
 
-function resetAllFields() {
-    if (confirm("Ông có chắc muốn xóa hết các dòng đang chọn để build lại không?")) {
-        // 1. Đưa tất cả các ô chọn (select) về dòng đầu tiên "---"
-        document.querySelectorAll('.box select.t').forEach(s => s.selectedIndex = 0);
-        
-        // 2. Đưa tất cả các ô nhập chỉ số về 0
-        document.querySelectorAll('.box input.v').forEach(i => i.value = 0);
-        
-        // 3. Tắt 2 checkbox Chất lượng và Thuộc tính
-        document.querySelectorAll('.box input[type="checkbox"]').forEach(c => c.checked = false);
 
-        // 4. Tính toán lại tổng chỉ số (đưa về 0)
-        calc();
 
-        // 5. Tự động lưu trạng thái trống này vào hồ sơ hiện tại
-        autoSave();
-        
-        console.log("🧹 Đã dọn dẹp sạch sẽ build hiện tại!");
-    }
-}
+
+
+
 
 
     function loadProfile(n) {
@@ -571,7 +835,7 @@ function resetAllFields() {
                     select.add(opt);
                 }
                 select.value = line.t;
-                b.querySelectorAll('.v')[j].value = line.v;
+                setNumericDisplay(b.querySelectorAll('.v')[j], line.v);
             });
             if (boxData.attr) {
                 if (b.querySelector('.chatLuong')) b.querySelector('.chatLuong').checked = boxData.cl;
@@ -581,67 +845,112 @@ function resetAllFields() {
         calc();
     }
 
-   function renderListProfile() {
+  function renderListProfile() {
     let db = JSON.parse(localStorage.getItem(DB) || '{}');
     const list = document.getElementById('listProfile');
     const countEl = document.getElementById('profileCount');
     
     const keys = Object.keys(db);
-    countEl.innerText = `${keys.length}/20`;
+    countEl.innerText = `${keys.length}/1000`;
 
-    // Thay đổi class: thêm min-w-[80px] để các nút hồ sơ đều nhau
-    list.innerHTML = keys.map(n => `
-        <div onmousedown="startTimer('${n}')" onmouseup="clearTimer()" onmouseleave="clearTimer()"
-             ontouchstart="startTimer('${n}')" ontouchend="clearTimer()"
-             onclick="loadProfile('${n}')" 
-             class="bg-zinc-800/60 p-2 rounded-lg cursor-pointer border border-zinc-700/50 text-[10px] text-zinc-400 hover:border-pink-500 hover:text-white transition-all text-center truncate shadow-sm min-w-[80px] max-w-[120px] shrink-0">
+    // Nếu không có hồ sơ nào, hiện thông báo trống cho đẹp
+    if (keys.length === 0) {
+        list.innerHTML = `<div class="text-[9px] text-zinc-600 italic py-2">Chưa có hồ sơ lưu trữ...</div>`;
+        return;
+    }
+
+    list.innerHTML = keys.map(n => {
+        return `
+        <div onmousedown="startTimer('${n}')" 
+             onmouseup="clearTimer()" 
+             onmouseleave="clearTimer()"
+             ontouchstart="startTimer('${n}')" 
+             ontouchend="clearTimer()"
+             onclick="if(!window.isDeleting) loadProfile('${n}')" 
+             class="relative group bg-zinc-800/60 p-2 rounded-lg cursor-pointer border border-zinc-700/50 text-[10px] text-zinc-400 hover:border-sky-500 hover:text-white transition-all text-center truncate shadow-sm min-w-[80px] max-w-[120px] shrink-0 active:scale-95">
+            
             ${n}
-        </div>`).join('');
+
+            <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>`;
+    }).join('');
 }
 
-    let pressTimer;
-    function startTimer(name) {
-        clearTimeout(pressTimer);
-        pressTimer = window.setTimeout(() => {
-            if (confirm(`Ông muốn xóa vĩnh viễn hồ sơ [${name}] này không?`)) {
-                let db = JSON.parse(localStorage.getItem(DB) || '{}');
-                delete db[name];
-                localStorage.setItem(DB, JSON.stringify(db));
-                renderListProfile();
-            }
-        }, 800);
+   let pressTimer;
+let currentDeleteTarget = ""; // Biến lưu tên hồ sơ đang chọn để xóa
+
+function startTimer(name) {
+    window.isDeleting = false;
+    clearTimeout(pressTimer);
+    pressTimer = window.setTimeout(() => {
+        // Thay vì dùng confirm, mình mở Modal đỏ lên
+        currentDeleteTarget = name;
+        const modal = document.getElementById('deleteModal');
+        const targetText = document.getElementById('deleteTargetName');
+        
+        targetText.innerText = `[ ${name} ]`; // Hiện tên hồ sơ lên bảng
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Gán lệnh thực hiện xóa cho nút Xác nhận
+        document.getElementById('btnConfirmDelete').onclick = function() {
+            executeDelete();
+        };
+    }, 800); // Vẫn giữ nhấn 0.8s để tránh bấm nhầm
+}
+
+
+// Hàm đóng bảng xóa
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    document.getElementById('deleteModal').classList.remove('flex');
+}
+
+// Hàm thực hiện xóa vĩnh viễn
+function executeDelete() {
+    let db = JSON.parse(localStorage.getItem(DB) || '{}');
+    delete db[currentDeleteTarget];
+    localStorage.setItem(DB, JSON.stringify(db));
+    
+    renderListProfile(); // Vẽ lại danh sách hồ sơ
+    
+    // Nếu đang mở đúng cái vừa xóa thì reset ô nhập tên
+    if (document.getElementById('name').value === currentDeleteTarget) {
+        document.getElementById('name').value = "";
     }
+    
+    closeDeleteModal();
+    showToast(`🔥 ĐÃ XÓA VĨNH VIỄN: ${currentDeleteTarget}`);
+}
     function clearTimer() { clearTimeout(pressTimer); }
 
 function saveToKho(index) {
     const slotName = slots[index];
     const box = document.querySelectorAll('.box')[index];
     
-    // 1. Lấy tên trang bị đang chọn từ Select (Vũ khí hoặc Đồ độc nhất)
+    // 1. Lấy tên trang bị đang chọn để làm tên mặc định
     let selectedItemName = "";
     if (slotName === "Vũ khí") {
         const vkSelect = document.getElementById('weaponSelect');
         if (vkSelect && vkSelect.value) {
             const info = JSON.parse(vkSelect.value);
-            selectedItemName = info.name; // Lấy tên vũ khí
+            selectedItemName = info.name;
         }
     } else {
         const uniqueSelect = box.querySelector('select[onchange^="autoFillUnique"]');
         if (uniqueSelect && uniqueSelect.value) {
-            selectedItemName = uniqueSelect.value; // Lấy tên đồ độc nhất
+            selectedItemName = uniqueSelect.value;
         }
     }
 
-    // 2. Tạo tên mặc định: Nếu chưa chọn đồ thì dùng "Đồ mới", có rồi thì dùng tên đồ đó + số ngẫu nhiên
     const defaultName = selectedItemName 
         ? `${selectedItemName} ${Date.now().toString().slice(-2)}`
         : `Đồ mới ${Date.now().toString().slice(-2)}`;
 
     const itemName = prompt(`Nhập tên lưu cho ${slotName}:`, defaultName);
-    
     if (!itemName) return;
 
-    // Lấy tất cả các dòng (bao gồm 5 dòng thuộc tính + 1 dòng đá bổ trợ)
+    // 2. Thu thập dữ liệu để lưu
     const allSelects = box.querySelectorAll('.t');
     const allInputs = box.querySelectorAll('.v');
 
@@ -649,7 +958,7 @@ function saveToKho(index) {
         name: itemName,
         attr: Array.from(allSelects).map((sel, i) => ({
             t: sel.value,
-            v: allInputs[i].value
+            v: parseFloat(allInputs[i].value) || 0
         })),
         cl: box.querySelector('.chatLuong')?.checked || false,
         tt: box.querySelector('.thuocTinh')?.checked || false
@@ -659,8 +968,29 @@ function saveToKho(index) {
     inventory[slotName].push(itemData);
     
     saveInventory(); 
-    render();        
-    alert(`Đã cất [${itemName}] vào kho!`);
+    
+    // 3. Cập nhật danh sách kho mà không reset toàn bộ màn hình
+    if (typeof updateInventoryDropdowns === "function") {
+        updateInventoryDropdowns();
+    } else {
+        render(); // Nếu chưa thêm hàm update lẻ thì dùng tạm render
+    }
+    
+    // --- ĐOẠN RESET VỀ MẶC ĐỊNH CHO RIÊNG KHUNG NÀY ---
+    // Reset các ô chọn thuộc tính về "---"
+    allSelects.forEach(s => s.value = "---");
+    // Reset các ô nhập số về 0
+    allInputs.forEach(i => i.value = 0);
+    // Reset ô chọn Kho đồ về mặc định
+    const invSelect = box.querySelector('.inv-select');
+    if (invSelect) invSelect.value = "";
+    // Tắt các checkbox
+    if (box.querySelector('.chatLuong')) box.querySelector('.chatLuong').checked = false;
+    if (box.querySelector('.thuocTinh')) box.querySelector('.thuocTinh').checked = false;
+    // ------------------------------------------------
+
+    calc(); // Tính toán lại tổng chỉ số (vì món này vừa bị xóa khỏi bảng build)
+    showToast(`✅ ĐÃ CẤT [${itemName}] VÀO KHO & LÀM TRỐNG Ô!`);
 }
 
 
@@ -669,7 +999,6 @@ function showKho() {
     const content = document.getElementById('khoContent');
     const total = document.getElementById('totalItems');
     
-    // Nạp lại dữ liệu từ máy trước khi hiện
     loadInventory(); 
 
     modal.classList.remove('hidden');
@@ -679,73 +1008,70 @@ function showKho() {
     slots.forEach((s) => {
         const items = inventory[s] || [];
         if (items.length > 0) {
-            let section = `<div class="mb-8 p-1">
-                <div class="text-pink-400 font-extrabold text-[11px] uppercase tracking-wider mb-4 border-b-2 border-pink-900/40 pb-1.5 ml-1">
-                    ● ${s.toUpperCase()} (${items.length} MÓN)
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">`;
-            
+            let section = `
+                <div class="mb-6">
+                    <div onclick="toggleKhoGroup(this)" class="group-header flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 px-4 py-3 rounded-xl cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sky-400 text-lg">●</span>
+                            <b class="text-white uppercase tracking-wider">${s} (${items.length} món)</b>
+                        </div>
+                        <span class="text-2xl transition-transform duration-300 group-arrow">▼</span>
+                    </div>
+                    
+                    <div class="kho-group-content mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-1">`;
+
             items.forEach((item, itemIdx) => {
                 count++;
                 
-                // Lọc bỏ các dòng trống "---" để hiển thị
-                const attrs = Array.isArray(item.attr) ? item.attr : [];
-                const validAttrs = attrs.filter(a => a && a.t !== "---");
+                const validAttrs = Array.isArray(item.attr) 
+                    ? item.attr.filter(a => a && a.t !== "---") 
+                    : [];
 
-                // Tạo HTML cho phần chỉ số (dạng cột: Tên - %)
-                let statsHtml = '';
-                validAttrs.forEach(a => {
-                    // Dòng chỉ số dạng cột: Tên bên trái, % bên phải
-                    statsHtml += `
-                        <div class="flex justify-between items-center text-[10px] leading-relaxed group">
-                            <span class="text-zinc-400 group-hover:text-white transition-colors">${a.t}</span>
-                            <b class="text-pink-400 font-bold ml-3 text-right">${a.v}%</b>
-                        </div>`;
-                });
+                let statsHtml = validAttrs.map(a => `
+                    <div class="flex justify-between text-[10px]">
+                        <span class="text-zinc-400">${a.t}</span>
+                        <b class="text-sky-400">${a.v}%</b>
+                    </div>
+                `).join('');
 
-                // Khối giao diện món đồ hoàn chỉnh (giống ảnh ông gửi)
                 section += `
-                    <div class="bg-zinc-200/40 p-5 rounded-2xl border border-zinc-700/60 flex flex-col justify-between hover:border-pink-500/50 transition-all hover:shadow-[0_0_15px_-3px_rgba(236,72,153,0.3)] hover:-translate-y-0.5">
-                        <div class="mb-4 pr-1">
-                            <div class="flex justify-between items-center gap-3 mb-4">
-                                <b class="text-white text-[13px] font-extrabold truncate flex-1 tracking-tight">${item.name || 'Món đồ chưa đặt tên'}</b>
-                                <div class="flex gap-1.5 shrink-0">
-                                    <button onclick="loadFromKhoDirectly('${s}', ${itemIdx})" 
-                                            class="bg-emerald-600/90 hover:bg-emerald-500 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
-                                        MẶC
-                                    </button>
-                                    <button onclick="deleteFromKho('${s}', ${itemIdx})" 
-                                            class="bg-red-600/90 hover:bg-red-500 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
-                                        XÓA
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-1.5 border-t border-zinc-700/60 pt-3">
-                                ${statsHtml || '<p class="text-[10px] text-zinc-600 italic">Món đồ này chưa có chỉ số.</p>'}
+                    <div class="bg-zinc-900/70 border border-zinc-700 rounded-2xl p-4 hover:border-sky-500/50 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <b class="text-white text-[13px] font-bold tracking-tight flex-1 pr-2">${item.name || 'Đồ chưa đặt tên'}</b>
+                            <div class="flex gap-2 shrink-0">
+                                <button onclick="loadFromKhoDirectly('${s}', ${itemIdx}); event.stopImmediatePropagation()" 
+                                        class="bg-emerald-600 hover:bg-emerald-500 text-white text-[9px] font-bold px-4 py-1.5 rounded-lg transition">
+                                    MẶC
+                                </button>
+                                <button onclick="deleteFromKho('${s}', ${itemIdx}); event.stopImmediatePropagation()" 
+                                        class="bg-red-600 hover:bg-red-500 text-white text-[9px] font-bold px-4 py-1.5 rounded-lg transition">
+                                    XÓA
+                                </button>
                             </div>
                         </div>
+                        
+                        <div class="space-y-1.5 text-[10px] border-t border-zinc-700 pt-3">
+                            ${statsHtml || '<p class="text-zinc-500 italic">Không có chỉ số</p>'}
+                        </div>
 
-                        <div class="mt-auto pt-3 border-t border-zinc-700/50 flex items-center gap-4 text-[9px]">
-                            <span class="text-pink-500/70 italic font-medium">Có thể Kế thừa:</span>
-                            <label class="flex items-center gap-1.5 ${item.cl ? 'text-pink-400 font-bold' : 'text-zinc-600'}">
-                                <span class="w-3.5 h-3.5 rounded border border-current flex items-center justify-center text-[8px]">${item.cl ? '✓' : ''}</span> 
-                                CL
-                            </label>
-                            <label class="flex items-center gap-1.5 ${item.tt ? 'text-pink-400 font-bold' : 'text-zinc-600'}">
-                                <span class="w-3.5 h-3.5 rounded border border-current flex items-center justify-center text-[8px]">${item.tt ? '✓' : ''}</span> 
-                                TT
-                            </label>
+                        <div class="mt-4 pt-3 border-t border-zinc-700 flex gap-4 text-[9px]">
+                            <span class="text-sky-400/70">Kế thừa:</span>
+                            <span class="${item.cl ? 'text-emerald-400' : 'text-zinc-500'}">CL ${item.cl ? '✓' : ''}</span>
+                            <span class="${item.tt ? 'text-emerald-400' : 'text-zinc-500'}">TT ${item.tt ? '✓' : ''}</span>
                         </div>
                     </div>`;
             });
+
             section += `</div></div>`;
             content.innerHTML += section;
         }
     });
 
     total.innerText = count;
-    if (count === 0) content.innerHTML = '<p class="text-center text-zinc-500 italic py-10">Kho trống trơn ông ơi, đi farm đồ rồi lưu vào đây nhé!</p>';
+    
+    if (count === 0) {
+        content.innerHTML = `<p class="text-center text-zinc-500 py-12">Kho trống! Hãy lưu đồ vào kho trước nhé.</p>`;
+    }
 }
   
 function hideKho() { document.getElementById('khoModal').classList.add('hidden'); }
@@ -775,7 +1101,7 @@ function loadFromKho(el) {
                     select.add(opt);
                 }
                 select.value = line.t;
-                allInputs[j].value = line.v || 0;
+                setNumericDisplay(allInputs[j], line.v || 0);
             }
         });
         
@@ -810,7 +1136,7 @@ function loadFromKhoDirectly(slotName, itemIdx) {
                 select.add(opt);
             }
             select.value = line.t;
-            allInputs[j].value = line.v || 0;
+            setNumericDisplay(allInputs[j], line.v || 0);
         }
     });
     
@@ -823,8 +1149,8 @@ function loadFromKhoDirectly(slotName, itemIdx) {
     
     // Đóng bảng kho sau khi nạp
     hideKho(); 
-    
-    alert(`Đã nạp món [${item.name}] ra màn hình chính để sử dụng!`);
+
+    showToast(`✅ ĐÃ TRANG BỊ: ${item.name}`); 
 }
 
 function deleteFromKho(slotName, itemIdx) {
@@ -859,18 +1185,432 @@ function toggleEye(el) {
     }
 }
 
+// Mở bảng hướng dẫn
 function showHuongDan() {
-    const msg = `--- HƯỚNG DẪN BUILD ĐỒ ---
-1. Chọn Class & Vũ khí để tự điền chỉ số nhanh.
-2. Bấm 👁️ để ẩn bớt các món đồ đã xong cho gọn.
-3. Bấm LƯU KHO để cất món đồ tâm đắc vào rương.
-4. Bấm ☁️ MÂY để lấy mã chia sẻ cho anh em khác.
-5. Hồ sơ thợ săn sẽ tự động lưu khi ông thay đổi số!
-
-Chúc ông build được set đồ bá cháy!`;
-    alert(msg);
+    const modal = document.getElementById('guideModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
 }
 
+// Đóng bảng hướng dẫn
+function closeGuide() {
+    const modal = document.getElementById('guideModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function showToast(message) {
+    const oldToast = document.querySelector('.toast');
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+
+    // KIỂM TRA: Nếu tin nhắn có chứa icon cảnh báo thì đổi sang nền đỏ
+    if (message.includes("⚠️") || message.includes("❌")) {
+        toast.style.background = "rgba(220, 38, 38, 0.95)"; // Màu đỏ (red-600)
+        toast.style.boxShadow = "0 4px 15px rgba(220, 38, 38, 0.4)";
+    } else {
+        toast.style.background = "rgba(14, 165, 233, 0.95)"; // Màu xanh mặc định
+    }
+
+    document.body.appendChild(toast);
+    setTimeout(() => { if (toast) toast.remove(); }, 1500);
+}
+
+// --- CÁC HÀM ĐIỀU KHIỂN BẢNG XÁC NHẬN ---
+function closeConfirm() {
+    const modal = document.getElementById('confirmModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function executeReset() {
+    // Thực hiện xóa sạch các ô nhập
+    document.querySelectorAll('.box').forEach(b => {
+        b.querySelectorAll('.t').forEach(s => s.value = "---");
+        b.querySelectorAll('.v').forEach(i => i.value = '');
+        if(b.querySelector('.chatLuong')) b.querySelector('.chatLuong').checked = false;
+        if(b.querySelector('.thuocTinh')) b.querySelector('.thuocTinh').checked = false;
+    });
+
+    calc();     // Tính lại chỉ số (về 0)
+    autoSave(); // Lưu trạng thái trống này vào máy
+    
+    closeConfirm(); // Đóng bảng
+    showToast("🧹 ĐÃ DỌN DẸP SẠCH SẼ!");
+}
+
+function resetAllFields() {
+    const modal = document.getElementById('confirmModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+// Tự động xóa màu đỏ khi anh em bắt đầu gõ tên
+document.getElementById('name').addEventListener('input', function() {
+    this.style.borderColor = "";
+    this.style.backgroundColor = "";
+});
+
+document.getElementById('cloudInput').addEventListener('input', function() {
+    // Xóa hết các thuộc tính style đã set
+    this.style.borderColor = "";
+    this.style.color = "";
+    this.classList.remove('shadow-[0_0_10px_rgba(239,68,68,0.5)]');
+});
+
+// 1. HÀM LƯU: Thêm isAuto để khi bấm nút Mây nó tự lưu ngầm mà không hiện báo lỗi hay thông báo thừa
+function luuProfile(isAuto = false) {
+    const nameInput = document.getElementById('name'); 
+    let n = nameInput.value.trim();
+
+    if (!n) {
+        if (!isAuto) { 
+            showToast("⚠️ NHẬP TÊN HỒ SƠ ĐÃ ÔNG ƠI!");
+            nameInput.style.borderColor = "#ef4444"; 
+            nameInput.focus();
+        }
+        return false; 
+    }
+
+    // Thu thập dữ liệu từ các ô nhập (giữ nguyên logic gốc của ông)
+    let data = Array.from(document.querySelectorAll('.box')).map(b => ({
+        attr: Array.from(b.querySelectorAll('.t')).map((t, i) => ({
+    t: t.value,
+    v: parseFloat(b.querySelectorAll('.v')[i].value) || 0
+})),
+        cl: b.querySelector('.chatLuong')?.checked || false,
+        tt: b.querySelector('.thuocTinh')?.checked || false
+    }));
+
+    let db = JSON.parse(localStorage.getItem(DB) || '{}');
+    db[n] = data;
+    localStorage.setItem(DB, JSON.stringify(db));
+
+    renderListProfile();
+    if (!isAuto) showToast(`✅ ĐÃ TẠO HỒ SƠ: ${n}`);
+    return true;
+}
+
+// 2. HÀM MỞ MÂY: Ép máy phải chạy lệnh Lưu trước khi tạo mã
+// 1. HÀM TẠO MÃ BỊ THIẾU (Bổ sung để hệ thống biết cách random 8 ký tự)
+function generateCloudCode(charLen, numLen) {
+    const chu = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", so = "0123456789";
+    let ma = "";
+    for (let i = 0; i < charLen; i++) ma += chu.charAt(Math.floor(Math.random() * chu.length));
+    for (let i = 0; i < numLen; i++) ma += so.charAt(Math.floor(Math.random() * so.length));
+    return ma;
+}
+
+// 2. HÀM COPY THỦ CÔNG (Cho cái nút "Sao chép mã hiện tại")
+function copyMa() {
+    const maValue = document.getElementById('ma_val').innerText.trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(maValue).then(() => {
+            showToast('✅ ĐÃ SAO CHÉP MÃ!');
+            document.getElementById('cloudModal').classList.add('hidden');
+            document.getElementById('cloudModal').classList.remove('flex');
+        });
+    }
+}
+
+// 3. HÀM MỞ MÂY (Đã sửa lỗi liệt nút & thêm tự copy)
+async function on() {
+    const nameInput = document.getElementById('name');
+    let n = nameInput.value.trim();
+
+    // FIX LỖI 1: Nếu chưa gõ tên, giờ nó sẽ chửi và bôi đỏ ô nhập tên luôn chứ không đứng im nữa
+    if (!n) {
+        showToast("⚠️ NHẬP TÊN HỒ SƠ VÀO ĐÃ NÍ ƠI!");
+        nameInput.style.borderColor = "#ef4444";
+        nameInput.focus();
+        return;
+    }
+
+    // Lưu ngầm dữ liệu hiện tại trước
+    luuProfile(true);
+
+    let db = JSON.parse(localStorage.getItem(DB) || '{}');
+    const ma = generateCloudCode(5, 3); // Tạo ngay 1 mã 8 ký tự xịn
+
+    // Bật bảng mây lên
+    document.getElementById('ma_val').innerText = ma;
+    document.getElementById('ma_val').style.color = "#60a5fa"; 
+    document.getElementById('cloudModal').classList.remove('hidden');
+    document.getElementById('cloudModal').classList.add('flex');
+
+    try {
+        // Gửi lên Google Sheet
+        await fetch(GOOGLE_API, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({ ma: ma, raw: JSON.stringify({ n: n, d: db[n] }) })
+        });
+
+        // TỰ ĐỘNG COPY VÀO MÁY
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(ma);
+        }
+        showToast("✅ ĐÃ LƯU & COPY MÃ: " + ma);
+
+        // Tự nhét mã vào ô nhập để ông dễ xem lại
+        const cloudInput = document.getElementById('cloudInput');
+        if (cloudInput) cloudInput.value = ma;
+
+    } catch (e) {
+        showToast("❌ LỖI KẾT NỐI ĐÁM MÂY!");
+        console.error(e);
+    }
+}
+
+// 3. HÀM BACKUP TẤT CẢ: Cũng tự lưu cái đang sửa rồi mới gom hết gửi đi
+async function saveToCloud() {
+    const btn = document.querySelector("button[onclick='saveToCloud()']");
+    if (btn) { btn.disabled = true; btn.innerHTML = "⏳ ĐANG LƯU..."; }
+
+    const data = getAllFormData(); // Hàm này lấy toàn bộ dữ liệu hiện tại
+    const ma = generateCloudCode(3, 3);
+    const payload = { isBackup: false, data: data, t: Date.now() };
+
+    try {
+        await fetch(GOOGLE_API, {
+            method: "POST",
+            mode: 'no-cors',
+            body: JSON.stringify({ ma: ma, raw: JSON.stringify(payload) })
+        });
+
+        const displayMa = document.getElementById('ma_val');
+        if (displayMa) {
+            displayMa.innerText = ma;
+            displayMa.style.color = "#00d2ff"; // Màu xanh cho mã lẻ
+        }
+        
+        await navigator.clipboard.writeText(ma);
+        showToast("✅ ĐÃ LƯU & COPY MÃ: " + ma);
+    } catch (e) {
+        showToast("❌ LỖI KẾT NỐI MÂY!");
+    } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = "LƯU MÂY"; }
+    }
+}
+
+function updateInventoryDropdowns() {
+    slots.forEach((s, i) => {
+        const select = document.querySelector(`.inv-select[data-slot-index="${i}"]`);
+        if (select) {
+            const items = inventory[s] || [];
+            select.innerHTML = `<option value="">-- Kho ${s} --</option>` + 
+                items.map(item => `<option value='${item.name}'>${item.name}</option>`).join('');
+        }
+    });
+}
+
+// Hàm ẩn/hiện nhóm đồ trong kho
+function toggleKhoGroup(el) {
+    const content = el.nextElementSibling;           // phần grid chứa các món
+    const arrow = el.querySelector('.group-arrow');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'grid';
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(-90deg)';
+    }
+}
+
+// === HÀM BACKUP TOÀN BỘ BUILD (ĐÃ SỬA - DÙNG NHƯ BẢN 2H20) ===
+async function saveAllToCloud() {
+    const btn = document.getElementById('btnBackup');
+    const originalText = btn ? btn.innerHTML : "🚀 SAO LƯU TOÀN BỘ BUILD (BACKUP)";
+    
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = "⏳ ĐANG LƯU...";
+    }
+
+    // Tạo mã backup (BK + 6 ký tự)
+    const ma = "BK" + generateCloudCode(3, 3);
+    
+    // Lấy toàn bộ dữ liệu hồ sơ hiện có
+    const allData = JSON.parse(localStorage.getItem(DB) || '{}');
+    
+    const payload = { 
+        isBackup: true, 
+        allData: allData, 
+        t: Date.now() 
+    };
+
+    try {
+        await fetch(GOOGLE_API, {
+            method: "POST",
+            mode: 'no-cors',
+            body: JSON.stringify({ 
+                ma: ma, 
+                raw: JSON.stringify(payload) 
+            })
+        });
+
+        // Hiển thị mã backup lên modal
+        const displayMa = document.getElementById('ma_val');
+        if (displayMa) {
+            displayMa.innerText = ma;
+            displayMa.style.color = "#fbbf24"; // Màu vàng nổi bật cho backup
+        }
+
+        // Tự động copy mã vào clipboard
+        await navigator.clipboard.writeText(ma);
+        
+        showToast("✅ ĐÃ SAO LƯU TOÀN BỘ & COPY MÃ: " + ma);
+
+        // Điền mã vào ô nhập để dễ test
+        const cloudInput = document.getElementById('cloudInput');
+        if (cloudInput) cloudInput.value = ma;
+
+    } catch (e) {
+        showToast("❌ LỖI KẾT NỐI ĐÁM MÂY!");
+        console.error(e);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+}
+
+// === HÀM TẠO MÃ (đã có trong cả 2 bản, giữ nguyên) ===
+function generateCloudCode(charLen, numLen) {
+    const chu = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const so = "0123456789";
+    let ma = "";
+    for (let i = 0; i < charLen; i++) 
+        ma += chu.charAt(Math.floor(Math.random() * chu.length));
+    for (let i = 0; i < numLen; i++) 
+        ma += so.charAt(Math.floor(Math.random() * so.length));
+    return ma;
+}
+
+// === HÀM COPY MÃ (đã có, giữ nguyên hoặc sửa nhẹ) ===
+function copyMa() {
+    const maValue = document.getElementById('ma_val').innerText.trim();
+    if (!maValue || maValue === "----") {
+        showToast("⚠️ Chưa có mã để sao chép!");
+        return;
+    }
+    
+    navigator.clipboard.writeText(maValue).then(() => {
+        showToast('✅ ĐÃ SAO CHÉP MÃ!');
+        // Không tự đóng modal nữa (để người dùng xem mã)
+    }).catch(() => {
+        showToast("❌ Không thể copy mã");
+    });
+}
+
+
 </script>
+
+<div id="confirmModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-[10001] p-4">
+    <div class="card w-full max-w-sm border-red-900/50 bg-zinc-950 p-6 text-center shadow-2xl">
+        <div class="text-4xl mb-4">⚠️</div>
+        <b class="text-white text-lg block mb-2 uppercase tracking-widest font-extrabold text-red-500">Xác Nhận Reset</b>
+        <p class="text-zinc-400 text-[11px] mb-6 leading-relaxed text-center">
+            Ông có chắc muốn xóa hết tất cả các dòng chỉ số đang chọn để build lại từ đầu không?<br>
+            <span class="text-red-400/80 font-bold">(Hành động này không thể hoàn tác)</span>
+        </p>
+        <div class="flex gap-3">
+            <button onclick="closeConfirm()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white py-3 rounded-xl font-bold text-[10px]">HỦY</button>
+            <button onclick="executeReset()" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-3 rounded-xl font-bold text-[10px] shadow-[0_0_15px_rgba(220,38,38,0.3)]">XÓA HẾT</button>
+        </div>
+    </div>
+</div>
+
+<div id="guideModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-[10001] p-4">
+    <div class="card w-full max-w-md border-sky-900/50 bg-zinc-950 p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-4 border-b border-zinc-800 pb-3">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">📖</span>
+                <b class="text-sky-400 uppercase tracking-widest text-sm font-extrabold">Hướng Dẫn Build Đồ</b>
+            </div>
+            <button onclick="closeGuide()" class="text-zinc-500 hover:text-white text-2xl">&times;</button>
+        </div>
+        
+        <div class="space-y-4 text-[11px] text-zinc-300 leading-relaxed">
+            <div class="flex gap-3">
+                <span class="text-sky-500 font-bold">01.</span>
+                <p><b class="text-white">Chọn Class:</b> Bấm chọn Class và Vũ khí để hệ thống tự điền các dòng chỉ số đặc biệt nhanh chóng.</p>
+            </div>
+            <div class="flex gap-3">
+                <span class="text-sky-500 font-bold">02.</span>
+                <p><b class="text-white">Ẩn/Hiện:</b> Bấm vào icon <span class="text-sky-400">👁️</span> để ẩn bớt các món đồ đã build xong cho gọn mắt.</p>
+            </div>
+            <div class="flex gap-3">
+                <span class="text-sky-500 font-bold">03.</span>
+                <p><b class="text-white">Kho Đồ:</b> Bấm <span class="text-orange-400">LƯU KHO</span> để cất những món đồ ưng ý. Ông có thể lấy ra dùng lại bất cứ lúc nào trong mục <span class="text-orange-400">KHO</span>.</p>
+            </div>
+            <div class="flex gap-3">
+                <span class="text-sky-500 font-bold">04.</span>
+                <p><b class="text-white">Đám Mây:</b> Dùng nút <span class="text-indigo-400">MÂY</span> để lấy mã 7 ký tự, gửi cho anh em khác để họ nạp build của ông.</p>
+            </div>
+            <div class="flex gap-3">
+                <span class="text-sky-500 font-bold">05.</span>
+                <p><b class="text-white">Tự Động Lưu:</b> Mọi thay đổi sẽ tự lưu vào trình duyệt. Ông không lo bị mất dữ liệu khi lỡ tay load lại trang.</p>
+            </div>
+        </div>
+
+        <button onclick="closeGuide()" class="w-full mt-6 bg-sky-600 hover:bg-sky-500 text-white py-3 rounded-xl font-bold text-[10px] transition-all uppercase tracking-widest shadow-[0_0_15px_rgba(14,165,233,0.3)]">
+            Đã Hiểu, Chiến Thôi!
+        </button>
+    </div>
+</div>
+
+<div id="importModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-[10001] p-4">
+    <div class="card w-full max-w-sm border-emerald-900/50 bg-zinc-950 p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-4 border-b border-zinc-800 pb-3">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">📥</span>
+                <b class="text-emerald-400 uppercase tracking-widest text-sm font-extrabold">Nhập Mã Đám Mây</b>
+            </div>
+            <button onclick="closeImport()" class="text-zinc-500 hover:text-white text-2xl">&times;</button>
+        </div>
+        
+        <p class="text-zinc-400 text-[10px] mb-4 italic">Dán mã 8 ký tự (VD: ABCDE123) của anh em vào đây để tải build:</p>
+        
+        <input type="text" id="cloudInput" placeholder="ABCD123" 
+               class="w-full text-center text-2xl font-mono tracking-[8px] py-4 bg-black/50 border-2 border-zinc-800 rounded-2xl focus:border-emerald-500 text-emerald-400 uppercase mb-6 outline-none transition-all">
+
+        <div class="flex gap-3">
+            <button onclick="closeImport()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white py-3 rounded-xl font-bold text-[10px]">HỦY</button>
+            <button onclick="executeNhap()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold text-[10px] shadow-[0_0_15px_rgba(16,185,129,0.3)]">XÁC NHẬN</button>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden items-center justify-center z-[10002] p-4">
+    <div class="card w-full max-w-xs border-red-900/50 bg-zinc-950 p-6 shadow-[0_0_50px_rgba(239,68,68,0.2)] text-center">
+        <div class="mb-4">
+            <div class="inline-block p-4 bg-red-500/10 rounded-full mb-2 animate-pulse">
+                <span class="text-3xl">⚠️</span>
+
+
+            </div>
+            <h3 class="text-red-500 font-black uppercase tracking-tighter text-lg">Xóa Hồ Sơ?</h3>
+            <p class="text-[10px] text-zinc-500 mt-1">Hành động này không thể hoàn tác, ní hãy cẩn thận!</p>
+        </div>
+
+        <div class="py-3 px-4 bg-red-500/5 border border-red-500/20 rounded-xl mb-6">
+            <span id="deleteTargetName" class="text-red-400 font-mono font-bold text-sm">----</span>
+        </div>
+
+        <div class="flex gap-3">
+            <button onclick="closeDeleteModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white py-3 rounded-xl font-bold text-[10px] transition-all">HỦY</button>
+            <button id="btnConfirmDelete" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-3 rounded-xl font-bold text-[10px] shadow-lg shadow-red-900/40 transition-all">XÁC NHẬN XÓA</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
