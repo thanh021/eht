@@ -226,6 +226,7 @@
       },
       methods: {
         change_job() {
+          this.pet = 0; // ĐÃ ĐƯỢC THÊM: Reset Móng Sắt về Không có khi chuyển Class
           if (this.job === 0) { this.weapon_speed = 2; this.quicken = 1; this.fury = 4; }
           else { this.weapon_speed = this.weapon_list[this.job][0].speed; this.quicken = 1; this.fury = 1; }
           this.weapon_speed_cal();
