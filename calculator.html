@@ -226,9 +226,18 @@
       },
       methods: {
         change_job() {
-          this.pet = 0; // ĐÃ ĐƯỢC THÊM: Reset Móng Sắt về Không có khi chuyển Class
-          if (this.job === 0) { this.weapon_speed = 2; this.quicken = 1; this.fury = 4; }
-          else { this.weapon_speed = this.weapon_list[this.job][0].speed; this.quicken = 1; this.fury = 1; }
+          // RESET TOÀN BỘ CÁC CHỈ SỐ VỀ MẶC ĐỊNH KHI ĐỔI CLASS
+          this.pet = 0;       // Reset Móng Sắt về không có
+          this.stat = 0;      // Reset Màu Stat về Xám (0%)
+          this.quicken = 1;   // Reset Đặc tính về Lv0
+          
+          if (this.job === 0) { 
+            this.weapon_speed = 2; 
+            this.fury = 4; // Berserker mặc định Fury Lv10
+          } else { 
+            this.weapon_speed = this.weapon_list[this.job][0].speed; 
+            this.fury = 1; // Các class khác mặc định Fury Lv0
+          }
           this.weapon_speed_cal();
         },
         weapon_speed_cal() {
